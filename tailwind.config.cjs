@@ -2,19 +2,17 @@
 module.exports = {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    
     extend: {
-      fontFamily:{
-        sans : ['Inter', 'sans-serif']
+      fontFamily: {
+        sans: ["Inter", "sans-serif"],
       },
-      colors:{
-        'brandblue': '#444ce7',
-        'lightbg' : '#F5F8FF',
-        'darkgrey' : '#344054',
-        'lightgrey' : '667085',
-      }
+      colors: {
+        brandblue: "#444ce7",
+        lightbg: "#F5F8FF",
+        darkgrey: "#344054",
+        lightgrey: "667085",
+      },
     },
   },
-  plugins: [],
-  
+  plugins: [require("tailwindcss-debug-screens"), require("flowbite/plugin")],
 };
