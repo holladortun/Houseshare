@@ -45,7 +45,7 @@ function App() {
     <Routes>
       <Route index element={<Home />} />
       <Route path="/home" element={<Home />} />
-      <Route path="account" element={<Account user={session?.user} />} exact>
+      <Route path="account" element={<Account /* user={session?.user} */ />} exact>
         <Route path="/account/properties" element={<Properties />} />
         <Route path="/account/listings" element={<Listings />} />
         <Route path="/account/notifications" element={<Notifications /> } />
