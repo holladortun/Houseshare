@@ -84,10 +84,10 @@ const Login = () => {
   }; */
 
   return (
-    <div>
+    <div >
       <Navbar />
-      <div className="container  mx-auto  min-h-[72vh] flex flex-col items-center justify-center gap-4 ">
-        <div className="shadow-lg p-10 w-[500px]">
+      <div className=" min-h-[72vh] overflow-hidden flex flex-col items-center justify-center gap-4 px-[20px]">
+        <div className=" ">
           <h3 className="text-4xl text-center">Login</h3>
 
           <form className="flex flex-col gap-4 mt-8 " onSubmit={handleSignIn}>
@@ -101,10 +101,11 @@ const Login = () => {
                 onChange={(event) => setMail(event.target.value)}
               />
             </div>
-            <div className="flex flex-col gap-2  border py-2 rounded-lg pl-4">
+            <div className="flex flex-col gap-2 ">
               <input
                 type="password"
                 id="description"
+                className="border py-2 rounded-lg pl-4"
                 placeholder="Enter Your Password"
                 required
                 value={pass}
@@ -122,11 +123,11 @@ const Login = () => {
             )}
           </form>
         </div>
-        <p className="text-[16px]">
+        <p className="text-[14px]">
           Don't have an account?
           <span className="ml-1">
             <button className="text-brandblue font-bold underline">
-              <Link to="/register">create an account now</Link>
+              <Link to="/register">create one now</Link>
             </button>
           </span>
         </p>

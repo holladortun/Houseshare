@@ -12,6 +12,8 @@ import { useEffect } from "react";
 import { supabase } from "../../supabaseClient";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const PropertyCard = () => {
   const responsive = {
@@ -85,9 +87,9 @@ const PropertyCard = () => {
               <div>
                 <div className="flex justify-between">
                   <h4 className="font-bold text-xl">
-                    #{property.amount}
+                    #{property.amount || <Skeleton />}
                     <span className="text-[13px] font-[400] bg-brandblue text-white px-4 ml-4 rounded-md py-1">
-                      {property.gender}
+                      {property.gender || <Skeleton />}
                     </span>
                   </h4>
                   <div className="flex items-center gap-1">
@@ -96,7 +98,9 @@ const PropertyCard = () => {
                   </div>
                 </div>
 
-                <h4 className="w-[80%] my-6">{property.description}</h4>
+                <h4 className="w-[80%] my-6">
+                  {property.description || <Skeleton count={3} />}
+                </h4>
               </div>
 
               <div className="flex justify-between py-4 rounded-b-lg ">

@@ -68,10 +68,12 @@ const Navbar = () => {
       </nav>
     </header> */
     <div className="px-[20px] md:px-[40px]  2xl:px-[100px] py-4 flex justify-between items-center shadow-md relative ">
-      <div className="flex items-center gap-2">
-        <AiOutlineHome className="text-3xl text-brandblue" />
-        <h4 className="font-[700] text-xl md:text-2xl">Houseshare</h4>
-      </div>
+      <Link to="/">
+        <div className="flex items-center gap-2">
+          <AiOutlineHome className="text-3xl text-brandblue" />
+          <h4 className="font-[700] text-xl md:text-2xl">Houseshare</h4>
+        </div>
+      </Link>
 
       <div className="hidden xl:flex items-center  justify-end w-[100%] gap-24">
         <div className="flex gap-12">
@@ -94,7 +96,7 @@ const Navbar = () => {
       <div
         className={
           isOpen
-            ? " xl:hidden flex flex-col items-end px-5 py-4 fixed  top-0 right-0 bg-white/95 h-[100vh] z-[1000] w-[80%] transition-all ease-in duration-500"
+            ? " xl:hidden flex flex-col items-end px-5 py-4 fixed  top-0 right-0 bg-white h-[100vh] z-[1000] w-[80%] transition-all ease-in duration-500"
             : " xl:hidden flex flex-col items-end px-5 py-4 absolute  top-0 right-[-100%] bg-white h-[100vh] z-10 w-full overflow-x-hidden transition-all ease-out duration-500"
         }
       >

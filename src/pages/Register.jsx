@@ -79,8 +79,8 @@ const Register = () => {
     <div>
       <Navbar />
       <div>
-        <div className="container  mx-auto  min-h-[72vh] flex flex-col items-center justify-center gap-4 ">
-          <div className="shadow-lg p-10 w-[500px]">
+        <div className="  min-h-[72vh] flex flex-col items-center justify-center gap-4 ">
+          <div className="">
             <h3 className="text-4xl text-center">Register</h3>
 
             <form className="flex flex-col gap-4 mt-8 " onSubmit={handleSignIn}>
@@ -94,11 +94,12 @@ const Register = () => {
                   onChange={(event) => setMail(event.target.value)}
                 />
               </div>
-              <div className="flex flex-col gap-2  border py-2 rounded-lg pl-4">
+              <div className="flex flex-col gap-2  ">
                 <input
                   type="password"
                   id="description"
                   placeholder="Enter Your Password"
+                  className="border py-2 rounded-lg pl-4"
                   required
                   value={pass}
                   onChange={(event) => setPass(event.target.value)}
@@ -115,7 +116,7 @@ const Register = () => {
               )}
             </form>
           </div>
-          <p className="text-[16px]">
+          <p className="text-[14px]">
             Have an account already? You can
             <span className="ml-1">
               <button className="text-brandblue font-bold underline">

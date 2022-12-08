@@ -9,10 +9,12 @@ const AccountNavbar = () => {
   return (
     <div className="sticky top-0 bg-white z-10">
       <div className="px-[20px] md:px-[40px]  2xl:px-[20px] py-6 flex justify-between items-center shadow-md ">
-        <div className="flex items-center gap-2">
-          <AiOutlineHome className="text-3xl text-brandblue" />
-          <h4 className="font-[700] text-xl md:text-2xl">Houseshare</h4>
-        </div>
+        <Link to="/">
+          <div className="flex items-center gap-2">
+            <AiOutlineHome className="text-3xl text-brandblue" />
+            <h4 className="font-[700] text-xl md:text-2xl">Houseshare</h4>
+          </div>
+        </Link>
         <div className="hidden xl:flex items-center  justify-between gap-4">
           <img
             src={ProfileDummy}
