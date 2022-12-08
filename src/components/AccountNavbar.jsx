@@ -4,8 +4,14 @@ import { Link } from "react-router-dom";
 import ProfileDummy from "../assets/profile_dummy.png";
 
 import { HiBars3BottomRight } from "react-icons/hi2";
+import { GrClose } from "react-icons/gr";
+import { useRecoilState } from "recoil";
+import { mobileDrawerState } from "../atoms/mobileDrawerAtom";
 
 const AccountNavbar = () => {
+
+const [menuOpen, setMenuOpen] = useRecoilState(mobileDrawerState)
+
   return (
     <div className="sticky top-0 bg-white z-10">
       <div className="px-[20px] md:px-[40px]  2xl:px-[20px] py-6 flex justify-between items-center shadow-md ">
@@ -25,7 +31,18 @@ const AccountNavbar = () => {
         </div>
 
         <div className="xl:hidden">
-          <HiBars3BottomRight className="text-3xl md:text-4xl" />
+          <button
+            onClick={() => {
+              setMenuOpen(!menuOpen);
+            }}
+            className="hover:animate-spin"
+          >
+            {menuOpen ? (
+              <GrClose className="text-3xl md:text-4xl " />
+            ) : (
+              <HiBars3BottomRight className="text-3xl md:text-4xl cursor-pointer " />
+            )}
+          </button>
         </div>
       </div>
     </div>
