@@ -13,13 +13,13 @@ import Chat from "./pages/dashboardpages/Chat";
 import { supabase } from "../supabaseClient";
 import PrivateRoutes from "./utils/PrivateRoutes";
 import Membership from "./pages/dashboardpages/Membership";
+import { useRecoilState } from "recoil";
+import { authSessionState } from "./atoms/authSessionAtom";
+import PrivateRoute from "./privateroutes/Protected";
 
 function App() {
-  const [session, setSession] = useState(null);
-  // const navigate = useNavigate();
-  // const handleNavigation = () => navigate("/login");
-  const [user, setUser] = useState(null);
-  const [loggedin, setLoggedin] = useState(true);
+  const [session, setSession] = useRecoilState(authSessionState);
+  
 
   /*  */
 
@@ -28,36 +28,38 @@ function App() {
       setSession(session);
     });
 
-    supabase.auth.onAuthStateChange((_event, session) => {
+ /*    supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
-    });
+    }); */
   }, []);
 
-  console.log(session);
-
-  if (session !== null) {
-    console.log("not null");
-
-    console.log(loggedin);
+  {
+    !session
+      ? console.log(session, "login")
+      : console.log(session, "account");
   }
 
   return (
     <Routes>
       <Route index element={<Home />} />
       <Route path="/home" element={<Home />} />
-      <Route path="account" element={<Account /* user={session?.user} */ />} exact>
+
+      <Route
+        path="account"
+        element={
+          <PrivateRoute>
+            <Account />
+          </PrivateRoute>
+        }
+        exact
+      >
         <Route path="/account/properties" element={<Properties />} />
         <Route path="/account/listings" element={<Listings />} />
-        <Route path="/account/notifications" element={<Notifications /> } />
+        <Route path="/account/notifications" element={<Notifications />} />
         <Route path="/account/memberships" element={<Membership />} />
         <Route path="/account/chat" element={<Listings />} />
       </Route>
-      {/*<Route element={<PrivateRoutes session={session} />}>
-        <Route
-          path="account"
-          element={}
-        />
-      </Route>  */}
+    
       <Route path="register" element={<Register />} />
 
       <Route path="login" element={<Login />} />

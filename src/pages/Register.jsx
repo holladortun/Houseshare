@@ -76,7 +76,7 @@ const Register = () => {
   };
 
   return (
-    <div>
+    <div className="overflow-hidden">
       <Navbar />
       <div>
         <div className="  min-h-[72vh] flex flex-col items-center justify-center gap-4 ">

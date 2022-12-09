@@ -6,7 +6,7 @@ import Footer from "../components/Footer";
 import { toast } from "react-toastify";
 import { AiFillAlert } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -14,27 +14,6 @@ const Login = () => {
   const [pass, setPass] = useState("");
   const [loading, setLoading] = useState(false);
   const handleNavigation = () => navigate("/account");
-  /* 
-  
-
-  
-  const [session, setSession] = useState(null);
-
-
-  useEffect(() => {
-       if (session !== null) {
-        handleNavigation();
-      }
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      console.log(session);
-    });
-
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-  }, []); */
-  // react use navigate to redirect logged in user to account page
 
   // sign in function
   const handleSignIn = async (e) => {
@@ -45,19 +24,21 @@ const Login = () => {
 
       const { data, error } = await supabase.auth.signInWithPassword({
         email: mail,
-
         password: pass,
+        
       });
-
-      if (error) {
+      console.log(data);
+      if (error) throw error;
+      navigate("/account");
+      /*  if (error) {
         alert(error.message);
       } else {
         alert("You have been signed in successfully");
 
         setMail("");
         setPass("");
-        handleNavigation();
-      }
+        navigate("/account");
+      } */
     } catch (error) {
       alert(error.error_description || error);
     } finally {
@@ -84,7 +65,7 @@ const Login = () => {
   }; */
 
   return (
-    <div >
+    <div className="overflow-hidden">
       <Navbar />
       <div className=" min-h-[72vh] overflow-hidden flex flex-col items-center justify-center gap-4 px-[20px]">
         <div className=" ">

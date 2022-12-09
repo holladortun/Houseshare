@@ -11,25 +11,28 @@ import { preferences } from "../../utils/navitems";
 import SideBarNav from "../../components/SideBarNav";
 import { useRecoilValue } from "recoil";
 import { mobileDrawerState } from "../../atoms/mobileDrawerAtom";
+import { authSessionState } from "../../atoms/authSessionAtom";
 
-const Account = ({ user }) => {
+const Account = () => {
   const navigate = useNavigate();
   const handleLogoutNavigation = () => navigate("/home");
-  const handleLoginNavigation = () => navigate("/login");
+
 
   const menuOpen = useRecoilValue(mobileDrawerState)
   const [location, setLocation] = useState("");
 
-  /*  */
+   
 
-  console.log(user);
 
-  useEffect(() => {
+
+
+
+  /* useEffect(() => {
     if (user == false) {
       console.log("not null");
       handleLoginNavigation();
     }
-  }, [user]);
+  }, [user]); */
 
   const handleSignOut = async () => {
     try {
@@ -72,9 +75,7 @@ const Account = ({ user }) => {
     console.log(location);
   };
 
- /*  const handleNavbarOpen = () => {
-    setMenuOpen(!menuOpen);
-  }; */
+
 
   //  <button onClick={handleSignOut}>Log Out</button>;
   return (
