@@ -16,6 +16,7 @@ import Membership from "./pages/dashboardpages/Membership";
 import { useRecoilState } from "recoil";
 import { authSessionState } from "./atoms/authSessionAtom";
 import PrivateRoute from "./privateroutes/Protected";
+import Settings from "./pages/dashboardpages/Settings";
 
 function App() {
   const [session, setSession] = useRecoilState(authSessionState);
@@ -28,9 +29,9 @@ function App() {
       setSession(session);
     });
 
- /*    supabase.auth.onAuthStateChange((_event, session) => {
+   supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
-    }); */
+    }); 
   }, []);
 
   {
@@ -58,6 +59,7 @@ function App() {
         <Route path="/account/notifications" element={<Notifications />} />
         <Route path="/account/memberships" element={<Membership />} />
         <Route path="/account/chat" element={<Listings />} />
+        <Route path="/account/settings" element={<Settings />} />
       </Route>
     
       <Route path="register" element={<Register />} />

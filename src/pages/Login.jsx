@@ -7,6 +7,8 @@ import { toast } from "react-toastify";
 import { AiFillAlert } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { Link, Navigate } from "react-router-dom";
+import { userState } from "../atoms/userAtom";
+import { useRecoilState, useRecoilValue } from "recoil";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -14,6 +16,7 @@ const Login = () => {
   const [pass, setPass] = useState("");
   const [loading, setLoading] = useState(false);
   const handleNavigation = () => navigate("/account");
+  const [user, setUser] = useRecoilState(userState);
 
   // sign in function
   const handleSignIn = async (e) => {
@@ -25,12 +28,11 @@ const Login = () => {
       const { data, error } = await supabase.auth.signInWithPassword({
         email: mail,
         password: pass,
-        
       });
-      console.log(data);
-      if (error) throw error;
-      navigate("/account");
-      /*  if (error) {
+
+      setUser(data.user);
+
+      if (error) {
         alert(error.message);
       } else {
         alert("You have been signed in successfully");
@@ -38,7 +40,7 @@ const Login = () => {
         setMail("");
         setPass("");
         navigate("/account");
-      } */
+      }
     } catch (error) {
       alert(error.error_description || error);
     } finally {

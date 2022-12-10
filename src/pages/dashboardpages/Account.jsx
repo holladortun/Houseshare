@@ -9,23 +9,18 @@ import { RiLogoutCircleLine } from "react-icons/ri";
 import navitems from "../../utils/navitems";
 import { preferences } from "../../utils/navitems";
 import SideBarNav from "../../components/SideBarNav";
-import { useRecoilValue } from "recoil";
+import { useSetRecoilState, useRecoilValue } from "recoil";
 import { mobileDrawerState } from "../../atoms/mobileDrawerAtom";
 import { authSessionState } from "../../atoms/authSessionAtom";
 
 const Account = () => {
   const navigate = useNavigate();
-  const handleLogoutNavigation = () => navigate("/home");
+const handleLogoutNavigation = () => navigate("/login");
 
-
-  const menuOpen = useRecoilValue(mobileDrawerState)
+  const menuOpen = useRecoilValue(mobileDrawerState);
   const [location, setLocation] = useState("");
 
-   
-
-
-
-
+ // const setauthSessionState = useSetRecoilState(authSessionState);
 
   /* useEffect(() => {
     if (user == false) {
@@ -43,6 +38,7 @@ const Account = () => {
       } else {
         alert("You have been logged out");
         handleLogoutNavigation();
+      //  setauthSessionState(null);
       }
     } catch (error) {
       alert(error.message);
@@ -75,13 +71,11 @@ const Account = () => {
     console.log(location);
   };
 
-
-
   //  <button onClick={handleSignOut}>Log Out</button>;
   return (
     <div>
       <AccountNavbar />
-      <div className=" bg-[#F5F8FF]  flex-col flex items-start pb-40 h-screen">
+      <div className=" bg-[#F5F8FF]  flex-col flex items-start pb-40 ">
         <div className="hidden w-[15%] xl:flex flex-col items-center bg-white px-[30px] h-[100vh] fixed">
           <div className="w-[100%]">
             <h4 className="self-start  tracking-widest my-4 text-[12px] text-black/60">
