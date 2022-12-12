@@ -14,7 +14,7 @@ import { mobileDrawerState } from "../../atoms/mobileDrawerAtom";
 import { authSessionState } from "../../atoms/authSessionAtom";
 import { userState } from "../../atoms/userAtom";
 import { userProfileState } from "../../atoms/userProfile";
-import { useQuery } from "react-query";
+
 
 const Account = () => {
   const navigate = useNavigate();
