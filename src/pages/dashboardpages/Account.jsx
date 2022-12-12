@@ -9,18 +9,23 @@ import { RiLogoutCircleLine } from "react-icons/ri";
 import navitems from "../../utils/navitems";
 import { preferences } from "../../utils/navitems";
 import SideBarNav from "../../components/SideBarNav";
-import { useSetRecoilState, useRecoilValue } from "recoil";
+import { useSetRecoilState, useRecoilValue, useRecoilState } from "recoil";
 import { mobileDrawerState } from "../../atoms/mobileDrawerAtom";
 import { authSessionState } from "../../atoms/authSessionAtom";
+import { userState } from "../../atoms/userAtom";
+import { userProfileState } from "../../atoms/userProfile";
+import { useQuery } from "react-query";
 
 const Account = () => {
   const navigate = useNavigate();
-const handleLogoutNavigation = () => navigate("/login");
+  const handleLogoutNavigation = () => navigate("/login");
 
   const menuOpen = useRecoilValue(mobileDrawerState);
-  const [location, setLocation] = useState("");
-
- // const setauthSessionState = useSetRecoilState(authSessionState);
+  const [userProfile, setUserProfile] = useRecoilState(userProfileState);
+ const user = useRecoilValue(userState);
+ const { id } = user;
+ //console.log(id);
+  // const setauthSessionState = useSetRecoilState(authSessionState);
 
   /* useEffect(() => {
     if (user == false) {
@@ -29,6 +34,40 @@ const handleLogoutNavigation = () => navigate("/login");
     }
   }, [user]); */
 
+  useEffect(() => {
+    getUserProfile();
+  }, []);
+
+  const getUserProfile = async () => {
+    const { data, error } = await supabase
+      .from("profiles")
+      .select()
+    .eq("id", id)
+      .single();
+
+    setUserProfile(data);
+    console.log(userProfile);
+
+    if (error) throw error;
+  };
+
+  /* const result = useQuery("userProfileFetch", async () => {
+    const { error, data } = await supabase
+      .from("profiles")
+      .select()
+      .eq("id", id)
+      .single();
+
+    if (error) {
+      throw new Error(error.message);
+    }
+    return data;
+  });
+ */
+ /*  console.log(result);
+
+  console.log(userProfile);
+ */
   const handleSignOut = async () => {
     try {
       const { error } = await supabase.auth.signOut();
@@ -38,31 +77,12 @@ const handleLogoutNavigation = () => navigate("/login");
       } else {
         alert("You have been logged out");
         handleLogoutNavigation();
-      //  setauthSessionState(null);
+        //  setauthSessionState(null);
       }
     } catch (error) {
       alert(error.message);
-    }
-  };
-
-  const handleClick = async () => {
-    try {
-      const { error } = await supabase
-
-        .from("profiles")
-
-        .update({ location: location })
-        .eq("id", user);
-
-      if (error) {
-        alert(error.message || error.description);
-      } else {
-        alert("Your location has been saved");
-      }
-    } catch (error) {
-      alert(error.error_description || error);
     } finally {
-      alert("Well done");
+      //
     }
   };
 
@@ -74,7 +94,7 @@ const handleLogoutNavigation = () => navigate("/login");
   //  <button onClick={handleSignOut}>Log Out</button>;
   return (
     <div>
-      <AccountNavbar />
+    <AccountNavbar /> 
       <div className=" bg-[#F5F8FF]  flex-col flex items-start pb-40 ">
         <div className="hidden w-[15%] xl:flex flex-col items-center bg-white px-[30px] h-[100vh] fixed">
           <div className="w-[100%]">

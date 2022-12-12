@@ -58,7 +58,7 @@ function App() {
         <Route path="/account/listings" element={<Listings />} />
         <Route path="/account/notifications" element={<Notifications />} />
         <Route path="/account/memberships" element={<Membership />} />
-        <Route path="/account/chat" element={<Listings />} />
+        <Route path="/account/chat" element={<Chat />} />
         <Route path="/account/settings" element={<Settings />} />
       </Route>
     

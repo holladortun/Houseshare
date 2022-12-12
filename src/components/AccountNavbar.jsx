@@ -5,12 +5,18 @@ import ProfileDummy from "../assets/profile_dummy.png";
 
 import { HiBars3BottomRight } from "react-icons/hi2";
 import { GrClose } from "react-icons/gr";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { mobileDrawerState } from "../atoms/mobileDrawerAtom";
+import { userProfileState } from "../atoms/userProfile";
 
 const AccountNavbar = () => {
+  const [menuOpen, setMenuOpen] = useRecoilState(mobileDrawerState);
 
-const [menuOpen, setMenuOpen] = useRecoilState(mobileDrawerState)
+  const userProfile = useRecoilValue(userProfileState);
+
+  const { first_name, profile_pictureurl } = userProfile;
+
+  console.log(profile_pictureurl);
 
   return (
     <div className="sticky top-0 bg-white z-10">
@@ -21,28 +27,31 @@ const [menuOpen, setMenuOpen] = useRecoilState(mobileDrawerState)
             <h4 className="font-[700] text-xl md:text-2xl">Houseshare</h4>
           </div>
         </Link>
-        <div className="hidden xl:flex items-center  justify-between gap-4">
-          <img
-            src={ProfileDummy}
-            alt=""
-            className=" rounded-full w-[40px] h-[40px] object-cover border-brandblue border"
-          />
-          <Link to="/account/properties">Properties</Link>
-        </div>
 
-        <div className="xl:hidden">
-          <button
-            onClick={() => {
-              setMenuOpen(!menuOpen);
-            }}
-            className="hover:animate-spin"
-          >
-            {menuOpen ? (
-              <GrClose className="text-3xl md:text-4xl " />
-            ) : (
-              <HiBars3BottomRight className="text-3xl md:text-4xl cursor-pointer " />
-            )}
-          </button>
+        <div className="flex items-center gap-2">
+          <div className=" flex items-center  justify-between gap-4">
+            <img
+              src={profile_pictureurl}
+              alt=""
+              className=" rounded-full w-[40px] h-[40px] object-cover border-brandblue border"
+            />
+            <h5 className="hidden xl:block">Hello {first_name}</h5>
+          </div>
+
+          <div className="xl:hidden">
+            <button
+              onClick={() => {
+                setMenuOpen(!menuOpen);
+              }}
+              className="hover:animate-spin"
+            >
+              {menuOpen ? (
+                <GrClose className="text-3xl md:text-4xl " />
+              ) : (
+                <HiBars3BottomRight className="text-3xl md:text-4xl cursor-pointer " />
+              )}
+            </button>
+          </div>
         </div>
       </div>
     </div>
