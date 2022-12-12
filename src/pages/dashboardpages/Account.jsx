@@ -15,16 +15,15 @@ import { authSessionState } from "../../atoms/authSessionAtom";
 import { userState } from "../../atoms/userAtom";
 import { userProfileState } from "../../atoms/userProfile";
 
-
 const Account = () => {
   const navigate = useNavigate();
   const handleLogoutNavigation = () => navigate("/login");
 
   const menuOpen = useRecoilValue(mobileDrawerState);
   const [userProfile, setUserProfile] = useRecoilState(userProfileState);
- const user = useRecoilValue(userState);
- const { id } = user;
- //console.log(id);
+  const user = useRecoilValue(userState);
+
+  //console.log(id);
   // const setauthSessionState = useSetRecoilState(authSessionState);
 
   /* useEffect(() => {
@@ -42,7 +41,7 @@ const Account = () => {
     const { data, error } = await supabase
       .from("profiles")
       .select()
-    .eq("id", id)
+      .eq("id", user.id)
       .single();
 
     setUserProfile(data);
@@ -64,7 +63,7 @@ const Account = () => {
     return data;
   });
  */
- /*  console.log(result);
+  /*  console.log(result);
 
   console.log(userProfile);
  */
@@ -94,7 +93,7 @@ const Account = () => {
   //  <button onClick={handleSignOut}>Log Out</button>;
   return (
     <div>
-    <AccountNavbar /> 
+      <AccountNavbar />
       <div className=" bg-[#F5F8FF]  flex-col flex items-start pb-40 ">
         <div className="hidden w-[15%] xl:flex flex-col items-center bg-white px-[30px] h-[100vh] fixed">
           <div className="w-[100%]">

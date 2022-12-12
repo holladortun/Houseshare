@@ -13,14 +13,16 @@ import Chat from "./pages/dashboardpages/Chat";
 import { supabase } from "../supabaseClient";
 import PrivateRoutes from "./utils/PrivateRoutes";
 import Membership from "./pages/dashboardpages/Membership";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { authSessionState } from "./atoms/authSessionAtom";
 import PrivateRoute from "./privateroutes/Protected";
 import Settings from "./pages/dashboardpages/Settings";
+import { userState } from "./atoms/userAtom";
 
 function App() {
   const [session, setSession] = useRecoilState(authSessionState);
-  
+
+  const setUserState = useSetRecoilState(userState);
 
   /*  */
 
@@ -29,16 +31,12 @@ function App() {
       setSession(session);
     });
 
-   supabase.auth.onAuthStateChange((_event, session) => {
+    supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
-    }); 
+    });
   }, []);
 
-  {
-    !session
-      ? console.log(session, "login")
-      : console.log(session, "account");
-  }
+  setUserState(session?.user);
 
   return (
     <Routes>
@@ -61,7 +59,7 @@ function App() {
         <Route path="/account/chat" element={<Chat />} />
         <Route path="/account/settings" element={<Settings />} />
       </Route>
-    
+
       <Route path="register" element={<Register />} />
 
       <Route path="login" element={<Login />} />

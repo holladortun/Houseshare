@@ -30,7 +30,7 @@ const Login = () => {
         password: pass,
       });
 
-      setUser(data.user);
+     // setUser(data.user);
 
       if (error) {
         alert(error.message);

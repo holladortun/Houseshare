@@ -14,9 +14,11 @@ const AccountNavbar = () => {
 
   const userProfile = useRecoilValue(userProfileState);
 
-  const { first_name, profile_pictureurl } = userProfile;
+ 
 
-  console.log(profile_pictureurl);
+
+
+  //console.log(profile_pictureurl);
 
   return (
     <div className="sticky top-0 bg-white z-10">
@@ -31,11 +33,11 @@ const AccountNavbar = () => {
         <div className="flex items-center gap-2">
           <div className=" flex items-center  justify-between gap-4">
             <img
-              src={profile_pictureurl}
+              src={userProfile?.profile_pictureurl}
               alt=""
               className=" rounded-full w-[40px] h-[40px] object-cover border-brandblue border"
             />
-            <h5 className="hidden xl:block">Hello {first_name}</h5>
+            <h5 className="hidden xl:block">Hello {userProfile?.first_name}</h5>
           </div>
 
           <div className="xl:hidden">
