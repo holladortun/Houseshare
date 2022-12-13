@@ -115,7 +115,7 @@ const Account = () => {
   return (
     <div>
       <AccountNavbar />
-      <div className=" bg-[#F5F8FF]  flex-col flex items-start pb-20 ">
+      <div className=" bg-[#F5F8FF]  flex-col flex items-start pb-40 ">
         <div className="hidden w-[15%] xl:flex flex-col items-center bg-white px-[30px] h-[100vh] fixed">
           <div className="w-[100%]">
             <h4 className="self-start  tracking-widest my-4 text-[12px] text-black/60">

@@ -1,6 +1,6 @@
-import React from 'react'
-import CityCard from './CityCard'
-import SectionHeader from './SectionHeader';
+import React from "react";
+import CityCard from "./CityCard";
+import SectionHeader from "./SectionHeader";
 
 const Trending = () => {
   return (
@@ -32,11 +32,8 @@ const Trending = () => {
           city="Jos"
         />
       </div>
-      <a href="#" className="btnmd mt-8">
-        Get Started
-      </a>
     </div>
   );
-}
+};
 
-export default Trending
+export default Trending;

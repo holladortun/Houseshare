@@ -17,7 +17,7 @@ const Home = () => {
       <Popular />
       <About />
       <Trending />
-      <UploadApartments />
+
       <Whyus />
       <Testimonial />
       <Footer />

@@ -87,7 +87,7 @@ const Settings = () => {
   return (
     <div className="flex  h-[100vh]  w-[100%]">
       <div className="xl:w-[15%] hidden xl:block"></div>
-      <div className="xl:w-[85%] w-[100%] pt-8 xl:px-4 px-5 flex flex-col items-center">
+      <div className="xl:w-[85%] w-[100%] pt-8 xl:px-4 px-5 flex flex-col items-center ">
         <div>
           <h4 className="font-bold text-4xl mb-8">Account Settings</h4>
         </div>
