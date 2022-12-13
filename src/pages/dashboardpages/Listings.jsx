@@ -3,7 +3,7 @@ import PropertyCard from "../../components/PropertyCard";
 import UploadApartments from "../../components/UploadApartments";
 import { supabase } from "../../../supabaseClient";
 import { useState, useEffect } from "react";
-import UserListingsCard from "../../components/userListingsCard";
+import UserListingsCard from "../../components/UserListingsCard";
 
 const Listings = () => {
   return (
@@ -15,7 +15,9 @@ const Listings = () => {
         </div>
         <div>
           <UserListingsCard />
-          <h4 className="font-bold xl:text-center text-2xl mt-12 ">Add New Listing</h4>
+          <h4 className="font-bold xl:text-center text-2xl mt-12 ">
+            Add New Listing
+          </h4>
           <UploadApartments />
         </div>
       </div>
