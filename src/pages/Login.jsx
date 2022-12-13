@@ -8,6 +8,7 @@ import { AiFillAlert } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { Link, Navigate } from "react-router-dom";
 import { userState } from "../atoms/userAtom";
+import { authSessionState } from "../atoms/authSessionAtom";
 import { useRecoilState, useRecoilValue } from "recoil";
 
 const Login = () => {
@@ -16,7 +17,13 @@ const Login = () => {
   const [pass, setPass] = useState("");
   const [loading, setLoading] = useState(false);
   const handleNavigation = () => navigate("/account");
-  const [user, setUser] = useRecoilState(userState);
+  const session = useRecoilValue(authSessionState);
+
+  useEffect(() => {
+    if (session) {
+      navigate("/account");
+    }
+  }, []);
 
   // sign in function
   const handleSignIn = async (e) => {
@@ -30,7 +37,7 @@ const Login = () => {
         password: pass,
       });
 
-     // setUser(data.user);
+      // setUser(data.user);
 
       if (error) {
         alert(error.message);

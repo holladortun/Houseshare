@@ -1,7 +1,11 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
+import { mobileDrawerState } from "../atoms/mobileDrawerAtom";
 
 const SideBarNav = ({ item, Icon, link }) => {
+const  closeMobileDrawer = useSetRecoilState(mobileDrawerState);
+
   return (
     <div>
       <NavLink
@@ -12,6 +16,7 @@ const SideBarNav = ({ item, Icon, link }) => {
             : "flex items-center text-[16px] gap-4 text-black py-3 pl-4 hover:scale-110 transition-all ease-in duration-200"
         }
         end
+        onClick={() => closeMobileDrawer(false)}
       >
         <Icon className="text-[20px]" />
         {item}

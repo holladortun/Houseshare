@@ -13,6 +13,7 @@ import { useSetRecoilState, useRecoilValue, useRecoilState } from "recoil";
 import { mobileDrawerState } from "../../atoms/mobileDrawerAtom";
 import { authSessionState } from "../../atoms/authSessionAtom";
 import { userState } from "../../atoms/userAtom";
+import { userListingsState } from "../../atoms/userListingsAtom";
 import { userProfileState } from "../../atoms/userProfile";
 
 const Account = () => {
@@ -22,7 +23,7 @@ const Account = () => {
   const menuOpen = useRecoilValue(mobileDrawerState);
   const [userProfile, setUserProfile] = useRecoilState(userProfileState);
   const user = useRecoilValue(userState);
-
+  const setuserListingsState = useSetRecoilState(userListingsState);
   //console.log(id);
   // const setauthSessionState = useSetRecoilState(authSessionState);
 
@@ -35,20 +36,40 @@ const Account = () => {
 
   useEffect(() => {
     getUserProfile();
+   // getListings();
   }, []);
 
   const getUserProfile = async () => {
     const { data, error } = await supabase
       .from("profiles")
-      .select()
+      .select(`*,apartments(*)`)
       .eq("id", user.id)
-      .single();
+      .single(); /*  */
 
     setUserProfile(data);
     console.log(userProfile);
 
     if (error) throw error;
   };
+
+/*   const getListings = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("apartments")
+        .select()
+        //.limit(3)
+        .order("id", {
+          ascending: false,
+        })
+        .eq("author_id", user.id);
+      if (error) throw error;
+      if (data != null) {
+        setuserListingsState(data);
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  }; */
 
   /* const result = useQuery("userProfileFetch", async () => {
     const { error, data } = await supabase
@@ -81,7 +102,7 @@ const Account = () => {
     } catch (error) {
       alert(error.message);
     } finally {
-      //
+     setUserProfile(null);
     }
   };
 
@@ -94,7 +115,7 @@ const Account = () => {
   return (
     <div>
       <AccountNavbar />
-      <div className=" bg-[#F5F8FF]  flex-col flex items-start pb-40 ">
+      <div className=" bg-[#F5F8FF]  flex-col flex items-start pb-20 ">
         <div className="hidden w-[15%] xl:flex flex-col items-center bg-white px-[30px] h-[100vh] fixed">
           <div className="w-[100%]">
             <h4 className="self-start  tracking-widest my-4 text-[12px] text-black/60">

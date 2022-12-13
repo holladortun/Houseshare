@@ -2,8 +2,9 @@ import React from "react";
 import { useState } from "react";
 import { supabase } from "../../supabaseClient";
 import { Link } from "react-router-dom";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { propertyImageState } from "../atoms/propertyImage";
+import { userState } from "../atoms/userAtom";
 
 const UploadApartments = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -16,6 +17,11 @@ const UploadApartments = () => {
   const [propertyImage, setPropertyImage] = useState(null);
   const [ispropertyAdded, setIsPropertyAdded] = useState(false);
   const [uploadedImage, setUploadedImage] = useState("");
+
+  const user = useRecoilValue(userState);
+
+/*   const { id } = user;
+  console.log(id); */
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -31,6 +37,7 @@ const UploadApartments = () => {
         gender: gender,
         location: location,
         propertyimageurl: `https://waafzskqomubrdnhnpzh.supabase.co/storage/v1/object/public/apartments/${propertyImage.name}`,
+        author_id: user?.id,
       });
       if (error) throw error;
     } catch (error) {
@@ -77,7 +84,7 @@ const UploadApartments = () => {
   }; */
 
   return (
-    <div className=" relative py-20">
+    <div className=" relative py-4">
       <h4 className=" font-bold  pb-8 text-2xl"></h4>
 
       {isLoading ? (
@@ -86,7 +93,7 @@ const UploadApartments = () => {
         </div>
       ) : (
         <div className="container max-w-[900px] mx-auto bg-white ">
-          <div className="shadow-lg p-10">
+          <div className="shadow-lg xl:p-10 p-5">
             <form
               onSubmit={() => handleSubmit(event)}
               className="flex flex-col gap-8"
@@ -103,8 +110,8 @@ const UploadApartments = () => {
                   required
                 />
               </div>
-              <div className="flex gap-8">
-                <div className="flex flex-col gap-2 w-[50%]">
+              <div className="flex flex-col xl:flex-row gap-8">
+                <div className="flex flex-col gap-2 xl:w-[50%]">
                   <label for="name">No. of Bathrooms</label>
                   <input
                     type="number"
@@ -117,7 +124,7 @@ const UploadApartments = () => {
                   />
                 </div>
 
-                <div className="flex flex-col gap-2 w-[50%]">
+                <div className="flex flex-col gap-2 xl:w-[50%]">
                   <label for="name">No. of Toilets</label>
                   <input
                     type="number"
@@ -131,8 +138,8 @@ const UploadApartments = () => {
                 </div>
               </div>
 
-              <div className="flex gap-8">
-                <div className="flex flex-col gap-2 w-[50%]">
+              <div className="flex flex-col xl:flex-row gap-8">
+                <div className="flex flex-col gap-2 xl:w-[50%]">
                   <label for="name">Location of Property</label>
                   <input
                     type="text"
@@ -147,7 +154,7 @@ const UploadApartments = () => {
                   />
                 </div>
 
-                <div className="flex flex-col gap-2 w-[50%]">
+                <div className="flex flex-col gap-2 xl:w-[50%]">
                   <label for="name">Preferred Gender</label>
                   <select
                     className="py-[11px] rounded-lg pl-4 bg-white border"
@@ -161,8 +168,8 @@ const UploadApartments = () => {
                   </select>
                 </div>
               </div>
-              <div className="flex gap-8">
-                <div className="flex flex-col gap-2 w-[50%]">
+              <div className="flex gap-8 flex-col xl:flex-row">
+                <div className="flex flex-col gap-2 xl:w-[50%]">
                   <label for="name">Amount</label>
                   <input
                     type="type"
@@ -173,7 +180,7 @@ const UploadApartments = () => {
                     onChange={(e) => setAmount(e.target.value)}
                   />
                 </div>
-                <div className="flex flex-col gap-2 w-[50%]">
+                <div className="flex flex-col gap-2 xl:w-[50%]">
                   <label for="name">Upload Property Image</label>
                   <input
                     type="file"

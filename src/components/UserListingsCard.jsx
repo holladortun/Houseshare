@@ -7,12 +7,12 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import { BsFillClockFill } from "react-icons/bs";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { propertyImageState } from "../atoms/propertyImage";
-import { propertyDataState } from "../atoms/propertyDataAtom";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import profileDummy from "../assets/profile_dummy.png"
+import { userListingsState } from "../atoms/userListingsAtom";
+import { userProfileState } from "../atoms/userProfile";
 
-const PropertyCard = () => {
+const UserListingsCard = () => {
   const responsive = {
     superLargeDesktop: {
       // the naming can be any, depends on you.
@@ -33,21 +33,20 @@ const PropertyCard = () => {
     },
   };
 
-  const propertyData = useRecoilValue(propertyDataState);
+  const userProfile = useRecoilValue(userProfileState);
 
+  let apartments;
 
+  if (userProfile) {
+    apartments = userProfile.apartments;
+    console.log(apartments);
+  }
 
- /*  if (propertyData) {
-    propertyProfilePicture = propertyData.amount; /* ?.profile_pictureurl; */
-
-  
-
-  console.log(propertyData);
-
+  console.log(apartments);
   return (
     //<div className=" grid md:grid-cols-2 xl:grid-cols-3 gap-1 xl:gap-8">
     <Carousel responsive={responsive}>
-      {propertyData.map((property) => {
+      {apartments.map((property) => {
         return (
           <div className="mx-2">
             <div className="relative border-none">
@@ -58,7 +57,7 @@ const PropertyCard = () => {
               />
               <div className="h-[250px] w-full bg-black/50 absolute top-0  z-100 rounded-t-lg"></div>
               <img
-                src={property.profiles?.profile_pictureurl ?property.profiles?.profile_pictureurl: profileDummy}
+                src={userProfile.profile_pictureurl}
                 alt=""
                 className="  absolute w-12 h-12 object-cover 
             rounded-full top-3 left-3"
@@ -111,4 +110,4 @@ const PropertyCard = () => {
   );
 };
 
-export default PropertyCard;
+export default UserListingsCard;

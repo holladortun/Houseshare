@@ -14,10 +14,6 @@ const AccountNavbar = () => {
 
   const userProfile = useRecoilValue(userProfileState);
 
- 
-
-
-
   //console.log(profile_pictureurl);
 
   return (
@@ -33,7 +29,11 @@ const AccountNavbar = () => {
         <div className="flex items-center gap-2">
           <div className=" flex items-center  justify-between gap-4">
             <img
-              src={userProfile?.profile_pictureurl}
+              src={
+                userProfile?.profile_pictureurl
+                  ? userProfile?.profile_pictureurl
+                  : ProfileDummy
+              }
               alt=""
               className=" rounded-full w-[40px] h-[40px] object-cover border-brandblue border"
             />

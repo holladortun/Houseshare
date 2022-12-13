@@ -18,12 +18,13 @@ import { authSessionState } from "./atoms/authSessionAtom";
 import PrivateRoute from "./privateroutes/Protected";
 import Settings from "./pages/dashboardpages/Settings";
 import { userState } from "./atoms/userAtom";
+import { propertyDataState } from "./atoms/propertyDataAtom";
 
 function App() {
   const [session, setSession] = useRecoilState(authSessionState);
 
   const setUserState = useSetRecoilState(userState);
-
+  const setPropertyData = useSetRecoilState(propertyDataState);
   /*  */
 
   useEffect(() => {
@@ -34,9 +35,29 @@ function App() {
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
+
+    getProperties();
   }, []);
 
   setUserState(session?.user);
+
+  const getProperties = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("apartments")
+        .select(`*,profiles(*)`)
+        //.limit(3)
+        .order("id", {
+          ascending: false,
+        });
+      if (error) throw error;
+      if (data != null) {
+        setPropertyData(data);
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
 
   return (
     <Routes>
