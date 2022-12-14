@@ -1,11 +1,34 @@
 import React from "react";
+import { usePaystackPayment } from "react-paystack";
+
+const config = {
+  reference: new Date().getTime().toString(),
+  email: "holladortun.omotoso@gmail.com",
+  amount: 5000000,
+  publicKey: "pk_test_f696597fc3e2df19c8c911679b5909041b8806ea",
+};
+
+// you can call this function anything
+const onSuccess = (reference) => {
+  // Implementation for whatever you want to do with reference and after success call.
+  console.log(reference);
+};
+
+// you can call this function anything
+const onClose = () => {
+  // implementation for  whatever you want to do when the Paystack dialog closed.
+  console.log("closed");
+};
 
 const Membership = () => {
+  const initializePayment = usePaystackPayment(config);
   return (
     <div className="flex  h-[80vh]  w-full z-10 pt-20">
       <div className="w-[20%]"></div>
       <div className="w-[80%] flex justify-center flex-col items-center ">
-        <h4 className=" font-bold  pb-8 text-2xl">Subscribe to Our Premium Plan</h4>
+        <h4 className=" font-bold  pb-8 text-2xl">
+          Subscribe to Our Premium Plan
+        </h4>
         <div class="w-full max-w-sm p-4 bg-white border rounded-lg shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700">
           <h5 class="mb-4 text-xl font-medium text-gray-500 dark:text-gray-400">
             Standard plan
@@ -154,6 +177,9 @@ const Membership = () => {
             </li>
           </ul>
           <button
+            onClick={() => {
+              initializePayment(onSuccess, onClose);
+            }}
             type="button"
             class="text-white bg-brandblue focus:ring-4 focus:outline-none focus:ring-blue-200 dark:focus:ring-blue-900 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex justify-center w-full text-center"
           >
