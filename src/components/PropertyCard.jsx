@@ -10,7 +10,8 @@ import { propertyImageState } from "../atoms/propertyImage";
 import { propertyDataState } from "../atoms/propertyDataAtom";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import profileDummy from "../assets/profile_dummy.png"
+import profileDummy from "../assets/profile_dummy.png";
+import TimeAgo from "timeago-react";
 
 const PropertyCard = () => {
   const responsive = {
@@ -35,12 +36,8 @@ const PropertyCard = () => {
 
   const propertyData = useRecoilValue(propertyDataState);
 
-
-
- /*  if (propertyData) {
+  /*  if (propertyData) {
     propertyProfilePicture = propertyData.amount; /* ?.profile_pictureurl; */
-
-  
 
   console.log(propertyData);
 
@@ -58,7 +55,11 @@ const PropertyCard = () => {
               />
               <div className="h-[250px] w-full bg-black/50 absolute top-0  z-100 rounded-t-lg"></div>
               <img
-                src={property.profiles?.profile_pictureurl ?property.profiles?.profile_pictureurl: profileDummy}
+                src={
+                  property.profiles?.profile_pictureurl
+                    ? property.profiles?.profile_pictureurl
+                    : profileDummy
+                }
                 alt=""
                 className="  absolute w-12 h-12 object-cover 
             rounded-full top-3 left-3"
@@ -75,7 +76,12 @@ const PropertyCard = () => {
                   </h4>
                   <div className="flex items-center gap-1">
                     <BsFillClockFill className="text-black/50" />
-                    <p className="text-black/50 text-[14px]">3 days ago</p>
+
+                    <TimeAgo
+                      className="text-black/50 text-[14px]"
+                      datetime={property.created_at}
+                      locale="EN_US"
+                    />
                   </div>
                 </div>
 
