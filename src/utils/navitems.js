@@ -27,7 +27,7 @@ const navitems = [
   {
     item: "Listings",
     Icon: RiHome4Fill,
-    link: "/account/listings",
+    link: "/account/mylistings",
   },
   {
     item: "Notifications",

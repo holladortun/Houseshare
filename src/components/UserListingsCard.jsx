@@ -11,6 +11,11 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { userListingsState } from "../atoms/userListingsAtom";
 import { userProfileState } from "../atoms/userProfile";
+import TimeAgo from "timeago-react";
+
+
+
+
 
 const UserListingsCard = () => {
   const responsive = {
@@ -74,7 +79,11 @@ const UserListingsCard = () => {
                   </h4>
                   <div className="flex items-center gap-1">
                     <BsFillClockFill className="text-black/50" />
-                    <p className="text-black/50 text-[14px]">3 days ago</p>
+                    <TimeAgo
+                      className="text-black/50 text-[14px]"
+                      datetime={property.created_at}
+                      locale="EN_US"
+                    />
                   </div>
                 </div>
 

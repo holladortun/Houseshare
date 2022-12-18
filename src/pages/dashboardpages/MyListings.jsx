@@ -5,7 +5,7 @@ import { supabase } from "../../../supabaseClient";
 import { useState, useEffect } from "react";
 import UserListingsCard from "../../components/UserListingsCard";
 
-const Listings = () => {
+const MyListings = () => {
   return (
     <div className="flex  w-[100%]">
       <div className="xl:w-[15%] hidden xl:block"></div>
@@ -25,4 +25,4 @@ const Listings = () => {
   );
 };
 
-export default Listings;
+export default MyListings;

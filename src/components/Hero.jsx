@@ -15,7 +15,7 @@ const Hero = () => {
       <Link to="/register">
         <button className="btnmd mt-8">Get Started</button>
       </Link>
-      <TimeAgo datetime={"2016-08-08 08:08:08"} locale="EN_US" />
+     
     </div>
   );
 };

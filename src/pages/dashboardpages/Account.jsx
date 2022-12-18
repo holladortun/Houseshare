@@ -15,6 +15,7 @@ import { authSessionState } from "../../atoms/authSessionAtom";
 import { userState } from "../../atoms/userAtom";
 import { userListingsState } from "../../atoms/userListingsAtom";
 import { userProfileState } from "../../atoms/userProfile";
+import { messagesState } from "../../atoms/messagesAtom";
 
 const Account = () => {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ const Account = () => {
 
   const menuOpen = useRecoilValue(mobileDrawerState);
   const [userProfile, setUserProfile] = useRecoilState(userProfileState);
+  const [messages, setMessages] = useRecoilState(messagesState);
   const user = useRecoilValue(userState);
   const setuserListingsState = useSetRecoilState(userListingsState);
   //console.log(id);
@@ -36,7 +38,10 @@ const Account = () => {
 
   useEffect(() => {
     getUserProfile();
-   // getListings();
+    getMessages();
+    
+
+    // getListings();
   }, []);
 
   const getUserProfile = async () => {
@@ -52,7 +57,34 @@ const Account = () => {
     if (error) throw error;
   };
 
-/*   const getListings = async () => {
+  const getMessages = async () => {
+    const { data, error } = await supabase
+      .from("messages")
+      .select(
+        `
+    *,
+    from:sender_id(first_name),
+    to:reciever_id(first_name)
+  `
+      )
+      .or(`sender_id.eq.${user.id},reciever_id.eq.${user.id}`);
+
+    setMessages(data);
+    console.log(messages);
+  };
+
+  /* const getMessages = async () => {
+    const { data, error } = await supabase
+      .from("messages")
+      .select("*")
+      .eq("reciever_id", user.id);
+
+    setMessages(data);
+    console.log(messages);
+
+    if (error) throw error;
+  }; */
+  /*   const getListings = async () => {
     try {
       const { data, error } = await supabase
         .from("apartments")
@@ -102,7 +134,7 @@ const Account = () => {
     } catch (error) {
       alert(error.message);
     } finally {
-     setUserProfile(null);
+      setUserProfile(null);
     }
   };
 

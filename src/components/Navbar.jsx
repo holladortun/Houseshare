@@ -21,7 +21,7 @@ const Navbar = () => {
       <div className="hidden xl:flex items-center  justify-end w-[100%] gap-24">
         <div className="flex gap-12">
           <Link to="/home">Home</Link>
-          <Link to="/apartments">Apartments</Link>
+          <Link to="/listings">Listings</Link>
           <Link to="/blog">Blog</Link>
         </div>
         <div className="flex items-center gap-4">

@@ -7,7 +7,7 @@ import Login from "./pages/Login";
 import Error from "./pages/Error";
 import Account from "./pages/dashboardpages/Account";
 import Properties from "./pages/dashboardpages/Properties";
-import Listings from "./pages/dashboardpages/Listings";
+import MyListings from "./pages/dashboardpages/MyListings";
 import Notifications from "./pages/dashboardpages/Notifications";
 import Chat from "./pages/dashboardpages/Chat";
 import { supabase } from "../supabaseClient";
@@ -19,12 +19,16 @@ import PrivateRoute from "./privateroutes/Protected";
 import Settings from "./pages/dashboardpages/Settings";
 import { userState } from "./atoms/userAtom";
 import { propertyDataState } from "./atoms/propertyDataAtom";
+import { allUsersState } from "./atoms/allUsersAtom";
+import SingleProperty from "./pages/SingleProperty";
+import Listings from "./pages/Listings";
 
 function App() {
   const [session, setSession] = useRecoilState(authSessionState);
 
   const setUserState = useSetRecoilState(userState);
   const setPropertyData = useSetRecoilState(propertyDataState);
+  const [allUsers, setAllUsers] = useRecoilState(allUsersState);
   /*  */
 
   useEffect(() => {
@@ -37,6 +41,7 @@ function App() {
     });
 
     getProperties();
+    getAllUsers();
   }, []);
 
   setUserState(session?.user);
@@ -59,6 +64,20 @@ function App() {
     }
   };
 
+  const getAllUsers = async () => {
+    try {
+      const { data, error } = await supabase.from("profiles").select();
+
+      if (error) throw error;
+      if (data) {
+        setAllUsers(data);
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  console.log(allUsers);
   return (
     <Routes>
       <Route index element={<Home />} />
@@ -74,7 +93,7 @@ function App() {
         exact
       >
         <Route path="/account/properties" element={<Properties />} />
-        <Route path="/account/listings" element={<Listings />} />
+        <Route path="/account/mylistings" element={<MyListings />} />
         <Route path="/account/notifications" element={<Notifications />} />
         <Route path="/account/memberships" element={<Membership />} />
         <Route path="/account/chat" element={<Chat />} />
@@ -84,6 +103,10 @@ function App() {
       <Route path="register" element={<Register />} />
 
       <Route path="login" element={<Login />} />
+
+      <Route path="/listings" element={<Listings />} />
+      <Route path="/listings/:listing_id" element={<SingleProperty />} />
+
       <Route path="*" element={<Error />} />
     </Routes>
   );
