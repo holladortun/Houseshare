@@ -17,15 +17,15 @@ const navitems = [
   {
     item: "Dashboard",
     Icon: RiHome4Fill,
-    link: "/account",
+    link: "/account/dashboard",
   },
-  {
+  /* {
     item: "Properties",
     Icon: RiBuilding2Fill,
     link: "/account/properties",
-  },
+  }, */
   {
-    item: "Listings",
+    item: "My Listings",
     Icon: RiHome4Fill,
     link: "/account/mylistings",
   },

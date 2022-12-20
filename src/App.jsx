@@ -22,6 +22,7 @@ import { propertyDataState } from "./atoms/propertyDataAtom";
 import { allUsersState } from "./atoms/allUsersAtom";
 import SingleProperty from "./pages/SingleProperty";
 import Listings from "./pages/Listings";
+import Dashboard from "./pages/dashboardpages/Dashboard";
 
 function App() {
   const [session, setSession] = useRecoilState(authSessionState);
@@ -77,6 +78,8 @@ function App() {
     }
   };
 
+  
+
   console.log(allUsers);
   return (
     <Routes>
@@ -92,6 +95,8 @@ function App() {
         }
         exact
       >
+        
+        <Route path="/account/dashboard" element={<Dashboard/>} />
         <Route path="/account/properties" element={<Properties />} />
         <Route path="/account/mylistings" element={<MyListings />} />
         <Route path="/account/notifications" element={<Notifications />} />

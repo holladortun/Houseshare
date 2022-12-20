@@ -87,7 +87,7 @@ const PropertyCard = () => {
                     </div>
                   </div>
 
-                  <h4 className="w-[80%] my-6">{property.description}</h4>
+                  <h4 className="w-[80%] my-6">{property.title}</h4>
                 </div>
 
                 <div className="flex justify-between py-4 rounded-b-lg ">
@@ -95,13 +95,13 @@ const PropertyCard = () => {
                     <div className="flex items-center gap-1">
                       <FaBath className="text-black/50" />
                       <p className="text-black/50 text-[17px]">
-                        {property.toilet}
+                        {property.bathrooms}
                       </p>
                     </div>
                     <div className="flex items-center gap-1">
                       <FaBed className="text-black/50" />
                       <p className="text-black/50 text-[17px]">
-                        {property.bathroom}
+                        {property.bedrooms}
                       </p>
                     </div>
                   </div>

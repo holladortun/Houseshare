@@ -21,7 +21,7 @@ const Login = () => {
 
   useEffect(() => {
     if (session) {
-      navigate("/account");
+      navigate("/account/dashboard");
     }
   }, []);
 
@@ -46,7 +46,7 @@ const Login = () => {
 
         setMail("");
         setPass("");
-        navigate("/account");
+        navigate("/account/dashboard");
       }
     } catch (error) {
       alert(error.error_description || error);

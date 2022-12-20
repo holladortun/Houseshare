@@ -165,9 +165,9 @@ const Chat = () => {
               <div className="flex gap-2 mt-8 mb-12">
                 <div className="w-[8%] order-2 justify-self-end flex justify-end ">
                   <img
-                    src={chatimgtwo}
+                    src={userProfile.profile_pictureurl}
                     alt=""
-                    className="rounded-full w-12 h-12 "
+                    className="rounded-full w-12 h-12 object-cover "
                   />
                 </div>
                 <div className="flex flex-col items-end w-[92%] flex-wrap ">

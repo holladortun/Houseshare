@@ -16,6 +16,7 @@ import { userState } from "../../atoms/userAtom";
 import { userListingsState } from "../../atoms/userListingsAtom";
 import { userProfileState } from "../../atoms/userProfile";
 import { messagesState } from "../../atoms/messagesAtom";
+import { bookmarksState } from "../../atoms/bookmarksAtom";
 
 const Account = () => {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ const Account = () => {
   const [messages, setMessages] = useRecoilState(messagesState);
   const user = useRecoilValue(userState);
   const setuserListingsState = useSetRecoilState(userListingsState);
+  const [bookmarks, setbookmarks] = useRecoilState(bookmarksState);
   //console.log(id);
   // const setauthSessionState = useSetRecoilState(authSessionState);
 
@@ -39,7 +41,6 @@ const Account = () => {
   useEffect(() => {
     getUserProfile();
     getMessages();
-    
 
     // getListings();
   }, []);
@@ -52,6 +53,7 @@ const Account = () => {
       .single(); /*  */
 
     setUserProfile(data);
+
     console.log(userProfile);
 
     if (error) throw error;
