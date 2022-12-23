@@ -23,6 +23,9 @@ import { allUsersState } from "./atoms/allUsersAtom";
 import SingleProperty from "./pages/SingleProperty";
 import Listings from "./pages/Listings";
 import Dashboard from "./pages/dashboardpages/Dashboard";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Slide } from "react-toastify";
 
 function App() {
   const [session, setSession] = useRecoilState(authSessionState);
@@ -42,7 +45,7 @@ function App() {
     });
 
     getProperties();
-    getAllUsers();
+  
   }, []);
 
   setUserState(session?.user);
@@ -65,55 +68,44 @@ function App() {
     }
   };
 
-  const getAllUsers = async () => {
-    try {
-      const { data, error } = await supabase.from("profiles").select();
-
-      if (error) throw error;
-      if (data) {
-        setAllUsers(data);
-      }
-    } catch (error) {
-      alert(error.message);
-    }
-  };
-
   
 
   console.log(allUsers);
   return (
-    <Routes>
-      <Route index element={<Home />} />
-      <Route path="/home" element={<Home />} />
+    <>
+      <ToastContainer transition={Slide} />
+      <Routes>
+        <Route index element={<Home />} />
+        <Route path="/home" element={<Home />} />
 
-      <Route
-        path="account"
-        element={
-          <PrivateRoute>
-            <Account />
-          </PrivateRoute>
-        }
-        exact
-      >
-        
-        <Route path="/account/dashboard" element={<Dashboard/>} />
-        <Route path="/account/properties" element={<Properties />} />
-        <Route path="/account/mylistings" element={<MyListings />} />
-        <Route path="/account/notifications" element={<Notifications />} />
-        <Route path="/account/memberships" element={<Membership />} />
-        <Route path="/account/chat" element={<Chat />} />
-        <Route path="/account/settings" element={<Settings />} />
-      </Route>
+        <Route
+          path="account"
+          element={
+            <PrivateRoute>
+              <Account />
+            </PrivateRoute>
+          }
+          exact
+        >
+          <Route path="/account/dashboard" element={<Dashboard />} />
+          <Route path="/account/properties" element={<Properties />} />
+          <Route path="/account/mylistings" element={<MyListings />} />
+          <Route path="/account/notifications" element={<Notifications />} />
+          <Route path="/account/memberships" element={<Membership />} />
+          <Route path="/account/chat" element={<Chat />} />
+          <Route path="/account/settings" element={<Settings />} />
+        </Route>
 
-      <Route path="register" element={<Register />} />
+        <Route path="register" element={<Register />} />
 
-      <Route path="login" element={<Login />} />
+        <Route path="login" element={<Login />} />
 
-      <Route path="/listings" element={<Listings />} />
-      <Route path="/listings/:listing_id" element={<SingleProperty />} />
+        <Route path="/listings" element={<Listings />} />
+        <Route path="/listings/:listing_id" element={<SingleProperty />} />
 
-      <Route path="*" element={<Error />} />
-    </Routes>
+        <Route path="*" element={<Error />} />
+      </Routes>
+    </>
   );
 }
 

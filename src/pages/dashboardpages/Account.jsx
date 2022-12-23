@@ -17,6 +17,7 @@ import { userListingsState } from "../../atoms/userListingsAtom";
 import { userProfileState } from "../../atoms/userProfile";
 import { messagesState } from "../../atoms/messagesAtom";
 import { bookmarksState } from "../../atoms/bookmarksAtom";
+import ReadMessagePopUp from "../../components/ReadMessagePopUp";
 
 const Account = () => {
   const navigate = useNavigate();
@@ -62,17 +63,11 @@ const Account = () => {
   const getMessages = async () => {
     const { data, error } = await supabase
       .from("messages")
-      .select(
-        `
-    *,
-    from:sender_id(first_name),
-    to:reciever_id(first_name)
-  `
-      )
-      .or(`sender_id.eq.${user.id},reciever_id.eq.${user.id}`);
+      .select(`*,sender_id(*),apartments(propertyimageurl)`)
+      .eq("receiver_id", userProfile.id)
+      .order("created_at", { ascending: false });
 
     setMessages(data);
-    console.log(messages);
   };
 
   /* const getMessages = async () => {
@@ -122,6 +117,8 @@ const Account = () => {
 
   console.log(userProfile);
  */
+
+  console.log(messages);
   const handleSignOut = async () => {
     try {
       const { error } = await supabase.auth.signOut();
@@ -243,6 +240,7 @@ const Account = () => {
 
         <div className="items-center justify-center w-full">
           <Outlet />
+          <ReadMessagePopUp />
         </div>
       </div>
     </div>
