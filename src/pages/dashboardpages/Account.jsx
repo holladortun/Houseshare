@@ -18,6 +18,7 @@ import { userProfileState } from "../../atoms/userProfile";
 import { messagesState } from "../../atoms/messagesAtom";
 import { bookmarksState } from "../../atoms/bookmarksAtom";
 import ReadMessagePopUp from "../../components/ReadMessagePopUp";
+import { ClipLoader } from "react-spinners";
 
 const Account = () => {
   const navigate = useNavigate();
@@ -29,21 +30,11 @@ const Account = () => {
   const user = useRecoilValue(userState);
   const setuserListingsState = useSetRecoilState(userListingsState);
   const [bookmarks, setbookmarks] = useRecoilState(bookmarksState);
-  //console.log(id);
-  // const setauthSessionState = useSetRecoilState(authSessionState);
-
-  /* useEffect(() => {
-    if (user == false) {
-      console.log("not null");
-      handleLoginNavigation();
-    }
-  }, [user]); */
+  const [loggingOut, setLoggingOut] = useState(false);
 
   useEffect(() => {
     getUserProfile();
     getMessages();
-
-    // getListings();
   }, []);
 
   const getUserProfile = async () => {
@@ -65,84 +56,33 @@ const Account = () => {
       .from("messages")
       .select(`*,sender_id(*),apartments(propertyimageurl)`)
       .eq("receiver_id", userProfile.id)
+      .eq("read", "no")
       .order("created_at", { ascending: false });
 
     setMessages(data);
   };
 
-  /* const getMessages = async () => {
-    const { data, error } = await supabase
-      .from("messages")
-      .select("*")
-      .eq("reciever_id", user.id);
-
-    setMessages(data);
-    console.log(messages);
-
-    if (error) throw error;
-  }; */
-  /*   const getListings = async () => {
-    try {
-      const { data, error } = await supabase
-        .from("apartments")
-        .select()
-        //.limit(3)
-        .order("id", {
-          ascending: false,
-        })
-        .eq("author_id", user.id);
-      if (error) throw error;
-      if (data != null) {
-        setuserListingsState(data);
-      }
-    } catch (error) {
-      alert(error.message);
-    }
-  }; */
-
-  /* const result = useQuery("userProfileFetch", async () => {
-    const { error, data } = await supabase
-      .from("profiles")
-      .select()
-      .eq("id", id)
-      .single();
-
-    if (error) {
-      throw new Error(error.message);
-    }
-    return data;
-  });
- */
-  /*  console.log(result);
-
-  console.log(userProfile);
- */
-
   console.log(messages);
   const handleSignOut = async () => {
     try {
-      const { error } = await supabase.auth.signOut();
-
-      if (error) {
-        alert(error.message);
-      } else {
-        alert("You have been logged out");
-        handleLogoutNavigation();
-        //  setauthSessionState(null);
-      }
+      setLoggingOut(true);
+      setTimeout(async () => {
+        const { error } = await supabase.auth.signOut();
+        if (error) {
+          alert(error.message);
+        } else {
+          // alert("You have been logged out");
+          handleLogoutNavigation();
+        }
+      }, 2000);
     } catch (error) {
       alert(error.message);
     } finally {
       setUserProfile(null);
+      setMessages(null);
     }
   };
 
-  const handleChange = (event) => {
-    setLocation(event.target.value);
-    console.log(location);
-  };
-
-  //  <button onClick={handleSignOut}>Log Out</button>;
   return (
     <div>
       <AccountNavbar />
@@ -183,8 +123,12 @@ const Account = () => {
               className="flex items-center text-[16px] gap-4 text-white bg-brandblue  rounded-md py-3 px-4 "
               onClick={handleSignOut}
             >
-              <RiLogoutCircleLine className="text-[20px]" />
-              LogOut
+              {loggingOut ? (
+                <ClipLoader size={20} color="#fff" speedMultiplier={0.8} />
+              ) : (
+                <RiLogoutCircleLine className="text-[20px]" />
+              )}
+              Log Out
             </Link>
           </div>
         </div>
@@ -233,6 +177,13 @@ const Account = () => {
               onClick={handleSignOut}
             >
               <RiLogoutCircleLine className="text-[20px]" />
+              LogOut
+            </Link>
+            <Link
+              className="flex items-center text-[16px] gap-4 text-white bg-brandblue  rounded-md py-3 px-4 "
+              onClick={handleSignOut}
+            >
+              <ClipLoader size={20} color="#fff" speedMultiplier={0.8} />
               LogOut
             </Link>
           </div>

@@ -2,6 +2,7 @@ import React from "react";
 import { AiOutlineHome } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import ProfileDummy from "../assets/profile_dummy.png";
+import { supabase } from "../../supabaseClient";
 
 import { HiBars3BottomRight } from "react-icons/hi2";
 import { GrClose } from "react-icons/gr";
@@ -12,7 +13,7 @@ import { BsFillBellFill } from "react-icons/bs";
 import { IoMdMail } from "react-icons/io";
 import { messagesState } from "../atoms/messagesAtom";
 import MessagesCard from "./MessagesCard";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Tooltip } from "react-tooltip";
 
 import { readMessagePopUpState } from "../atoms/readMessagePopUpAtom";
@@ -28,29 +29,58 @@ const AccountNavbar = () => {
   const userProfile = useRecoilValue(userProfileState);
 
   const [messages, setMessages] = useRecoilState(messagesState);
-  //console.log(profile_pictureurl);
 
   const setReadMessagePopUp = useSetRecoilState(readMessagePopUpState);
 
-  const handleReadMessage = (id) => {
+  /* const insertNotification = async () => {
     try {
-      setReadMessagePopUp(true);
-
-      const clickedMessage = messages.filter((message) => {
-        return message.id == id;
+      const { error } = await supabase.from("notifications").insert({
+        type: 1,
+        trigger_id: userProfile.id,
+        recipient_id: clickedMessage[0]?.sender_id.id,
       });
-      setClickedMessage(clickedMessage);
-      console.log(clickedMessage);
       if (error) throw error;
     } catch (error) {
-    } finally {
+      alert(`${error.message} notification`);
+    }
+  }; */
+
+  let singleMessage;
+
+  const handleReadMessage = async (id) => {
+    try {
+      singleMessage = await messages.filter((message) => {
+        return message.id == id;
+      });
+
+      setClickedMessage(singleMessage);
+      await readReceipt();
+      setReadMessagePopUp(true);
+
+      //insertNotification();
+
       const readMessage = messages.filter((message) => {
         return message.id !== id;
       });
       setMessages(readMessage);
+      console.log(readMessage);
+    } catch (error) {
+    } finally {
     }
   };
+  const readReceipt = async () => {
+    try {
+      console.log("i ran");
 
+      const { error } = await supabase
+        .from("messages")
+        .update({ read: "yes" })
+        .eq("id", singleMessage[0]?.id);
+      if (error) throw error;
+    } catch (error) {
+      alert(`${error.message} reciept`);
+    }
+  };
   return (
     <div className="sticky top-0 bg-white z-10">
       <div className="px-[20px] md:px-[40px]  2xl:px-[20px] py-6 flex justify-between items-center shadow-md ">

@@ -13,10 +13,6 @@ import { userListingsState } from "../atoms/userListingsAtom";
 import { userProfileState } from "../atoms/userProfile";
 import TimeAgo from "timeago-react";
 
-
-
-
-
 const UserListingsCard = () => {
   const responsive = {
     superLargeDesktop: {
@@ -87,7 +83,9 @@ const UserListingsCard = () => {
                   </div>
                 </div>
 
-                <h4 className="w-[80%] my-6">{property.description}</h4>
+                <h4 className="w-[80%] my-6">
+                  {property.description.slice(0, 35) + "..."}
+                </h4>
               </div>
 
               <div className="flex justify-between py-4 rounded-b-lg ">

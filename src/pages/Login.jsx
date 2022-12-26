@@ -10,6 +10,7 @@ import { Link, Navigate } from "react-router-dom";
 import { userState } from "../atoms/userAtom";
 import { authSessionState } from "../atoms/authSessionAtom";
 import { useRecoilState, useRecoilValue } from "recoil";
+import { ClipLoader } from "react-spinners";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -31,47 +32,33 @@ const Login = () => {
 
     try {
       setLoading(true);
+      setTimeout(async () => {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: mail,
+          password: pass,
+        });
 
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: mail,
-        password: pass,
-      });
+        if (error) {
+          toast.success(error.message, {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 4000,
+            progressClassName: "custom-toast-progress",
+          });
 
-      // setUser(data.user);
-
-      if (error) {
-        alert(error.message);
-      } else {
-        alert("You have been signed in successfully");
-
-        setMail("");
-        setPass("");
-        navigate("/account/dashboard");
-      }
+          setLoading(false);
+        } else {
+          setMail("");
+          setPass("");
+          navigate("/account/dashboard");
+        }
+      }, 5000);
     } catch (error) {
       alert(error.error_description || error);
     } finally {
       {
-        setLoading(false);
       }
     }
   };
-
-  /* toast.promise(Login, {
-    pending: "Promise is pending",
-    success: "Promise resolved 👌",
-    error: "Promise rejected 🤯",
-  });*/
-
-  // Sign Out function
-  /* const handleSignOut = async () => {
-    try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
-    } catch (error) {
-      alert(error.message);
-    }
-  }; */
 
   return (
     <div className="overflow-hidden">
@@ -103,7 +90,8 @@ const Login = () => {
               />
             </div>
             {loading ? (
-              <p className="text-center text-[16px] w-full bg-brandblue text-white rounded-md py-3">
+              <p className="text-center text-[16px] w-full bg-brandblue text-white rounded-md py-3 flex items-center justify-center gap-2">
+                <ClipLoader size={20} color="#fff" speedMultiplier={0.8} />
                 Logging in...
               </p>
             ) : (

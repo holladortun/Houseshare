@@ -32,11 +32,7 @@ import emailjs from "@emailjs/browser";
 import { GrClose } from "react-icons/gr";
 import { ClipLoader } from "react-spinners";
 import { toast } from "react-toastify";
-
-
-
-
-
+import { authSessionState } from "../atoms/authSessionAtom";
 
 const SingleProperty = () => {
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -46,19 +42,19 @@ const SingleProperty = () => {
   const { listing_id } = useParams();
   const userProfile = useRecoilValue(userProfileState);
 
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
+  const authSession = useRecoilValue(authSessionState);
 
   let id;
-  let refetch;
 
   if (userProfile) {
     id = userProfile.id;
   }
 
-  useEffect(() => {
-    getBookmarks();
+/*   useEffect(() => {
+    authSession ? getBookmarks() : null;
   }, []);
-
+ */
   const getBookmarks = async () => {
     try {
       const { data, error } = await supabase
@@ -82,10 +78,7 @@ const SingleProperty = () => {
   });
 
   console.log(singleProperty);
-  /* bookmarks.includes(listing_id)
-    ? setIsBookmarked(true)
-    : setIsBookmarked(false);
- */
+
   console.log(singleProperty);
   console.log(bookmarks);
   const addBookmark = async () => {
@@ -126,24 +119,24 @@ const SingleProperty = () => {
     e.preventDefault();
 
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       const { error } = await supabase.from("messages").insert({
         sender_id: id,
         receiver_id: singleProperty?.profiles.id,
         message_text: messageText,
-        property_id: listing_id
+        property_id: listing_id,
       });
 
       if (error) throw error;
     } catch (error) {
       alert(error.message);
     } finally {
-      setMessageText("")
+      setMessageText("");
       setIsLoading(false);
       toast.success("Your message has been sent", {
         position: toast.POSITION.BOTTOM_RIGHT,
         autoClose: 2000,
-        progressClassName:"custom-toast-progress"
+        progressClassName: "custom-toast-progress",
       });
     }
   };
@@ -160,6 +153,16 @@ const SingleProperty = () => {
     .subscribe();
 
   console.log(singleProperty?.profiles);
+
+  const handleOpenMessagePopUp = () => {
+    authSession
+      ? setMailPopup(!mailPopUp)
+      : toast.success("Please log in to send a message", {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 4000,
+          progressClassName: "custom-toast-progress",
+        });
+  };
 
   return (
     <div>
@@ -206,7 +209,7 @@ const SingleProperty = () => {
             </div>
 
             <div className="flex gap-6 text-[#7f7f7f] text-[20px] items-center ">
-              {bookmarks?.includes(listing_id) || isBookmarked ? (
+              {/* {bookmarks?.includes(listing_id) || isBookmarked ? (
                 <>
                   <BsFillBookmarkCheckFill
                     className="hover:text-brandblue  cursor-pointer text-brandblue"
@@ -232,7 +235,7 @@ const SingleProperty = () => {
                     className="text-[13px] bg-brandblue"
                   />
                 </>
-              )}
+              )} */}
 
               <BsFillShareFill
                 className="hover:text-brandblue cursor-pointer"
@@ -291,9 +294,7 @@ const SingleProperty = () => {
             </a>
             <button
               className="btnlg flex items-center gap-2 text-[15px]"
-              onClick={() => {
-                setMailPopup(!mailPopUp);
-              }}
+              onClick={handleOpenMessagePopUp}
             >
               Send Message <MdEmail className="text-[20px]" />
             </button>
@@ -313,10 +314,6 @@ const SingleProperty = () => {
             }}
           />
           <form onSubmit={sendMessage} className="flex flex-col gap-4 ">
-            {/* <label>Name</label>
-            <input type="text" name="user_name" placeholder="Your Name" /> */}
-            {/*  <label>Email</label>
-            <input type="email" name="user_email" placeholder="Your Email" /> */}
             <label>Message</label>
             <textarea
               name="message"
