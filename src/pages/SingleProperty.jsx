@@ -8,9 +8,14 @@ import { propertyDataState } from "../atoms/propertyDataAtom";
 import { useEffect, useState, useRef } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { FaBath } from "react-icons/fa";
-import { FaBed } from "react-icons/fa";
-import { FaMapMarkerAlt } from "react-icons/fa";
+import {
+  FaBath,
+  FaMale,
+  FaBed,
+  FaMapMarkerAlt,
+  FaFemale,
+} from "react-icons/fa";
+
 import { WhatsappShareButton, WhatsappIcon } from "react-share";
 import {
   BsFillShareFill,
@@ -51,7 +56,7 @@ const SingleProperty = () => {
     id = userProfile.id;
   }
 
-/*   useEffect(() => {
+  /*   useEffect(() => {
     authSession ? getBookmarks() : null;
   }, []);
  */
@@ -79,7 +84,6 @@ const SingleProperty = () => {
 
   console.log(singleProperty);
 
-  console.log(singleProperty);
   console.log(bookmarks);
   const addBookmark = async () => {
     try {
@@ -167,7 +171,7 @@ const SingleProperty = () => {
   return (
     <div>
       <Navbar />
-      {}
+
       <div className="container max-w-[1300px] mx-auto px-[20px] md:px-[40px] 2xl:px-[100px] py-16 relative ">
         <div>
           <img
@@ -203,6 +207,19 @@ const SingleProperty = () => {
                   <span className="flex items-center  gap-2 text-[17px]">
                     <FaMapMarkerAlt className="text-xl text-brandblue" />
                     {singleProperty?.location}
+                  </span>
+                </div>
+              </div>
+              <div>
+                <div>
+                  <h4 className=" text-[15px]">Preferred Roommate</h4>
+                  <span className="flex items-center  gap-2 text-[17px]">
+                    {singleProperty?.gender == "male" ? (
+                      <FaMale className="text-xl text-brandblue" />
+                    ) : (
+                      <FaFemale className="text-xl text-brandblue" />
+                    )}
+                    {singleProperty?.gender}
                   </span>
                 </div>
               </div>
@@ -257,7 +274,9 @@ const SingleProperty = () => {
                 </span>
                 <p className="text-[17px]">by</p>
                 <p className="text-[17px]">
-                  {singleProperty?.profiles.first_name}
+                  {singleProperty?.author_id == id
+                    ? "You"
+                    : singleProperty?.profiles.first_name}
                 </p>
                 <img
                   src={singleProperty?.profiles.profile_pictureurl}
@@ -287,18 +306,20 @@ const SingleProperty = () => {
               <p className="font-medium text-[17px]">per night</p>
             </span>
           </div>
-          <div className="flex items-start gap-3">
-            <a className="btnlg flex items-center gap-2 text-[15px]" href="#">
-              Call Now{" "}
-              <BsTelephoneOutboundFill className="text-[15px] font-light" />
-            </a>
-            <button
-              className="btnlg flex items-center gap-2 text-[15px]"
-              onClick={handleOpenMessagePopUp}
-            >
-              Send Message <MdEmail className="text-[20px]" />
-            </button>
-          </div>
+          {singleProperty?.author_id == id ? null : (
+            <div className="flex items-start gap-3">
+              <a className="btnlg flex items-center gap-2 text-[15px]" href="#">
+                Call Now{" "}
+                <BsTelephoneOutboundFill className="text-[15px] font-light" />
+              </a>
+              <button
+                className="btnlg flex items-center gap-2 text-[15px]"
+                onClick={handleOpenMessagePopUp}
+              >
+                Send Message <MdEmail className="text-[20px]" />
+              </button>
+            </div>
+          )}
         </div>
         <div
           className={

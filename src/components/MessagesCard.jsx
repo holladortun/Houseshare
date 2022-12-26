@@ -19,15 +19,15 @@ const MessagesCard = ({ message, handleReadMessage }) => {
 
   return (
     <div className="px-5 py-5 flex gap-2 relative">
-      <div className="flex items-start gap-4 w-[78%]">
-        <div className="w-[15%]">
+      <div className="flex items-start gap-4 md:w-[78%] w-[100%]">
+        <div className="md:w-[15%] w-[15%]">
           <img
             src={profile_pictureurl}
             alt=""
             className="rounded-full w-12 h-12 object-cover "
           />
         </div>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 ">
           <div>
             <p>
               <TimeAgo
@@ -59,7 +59,7 @@ const MessagesCard = ({ message, handleReadMessage }) => {
           </div>
         </div>
       </div>
-      <div className="w-[22%]">
+      <div className="w-[22%] hidden md:block">
         <img src={propertyimageurl} alt="" className="rounded-md h-[100px] object-cover" />
       </div>
     </div>

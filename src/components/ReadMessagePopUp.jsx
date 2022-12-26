@@ -57,11 +57,11 @@ const ReadMessagePopUp = () => {
   };
 
   return (
-    <div>
+    <div >
       <div
         className={
           readMessagePopUp
-            ? " fixed top-[20%] left-[50%] w-[550px] ml-[-275px] z-20 bg-white pt-6 pb-12 px-8 shadow-md rounded-md flex flex-col gap-4 transition-[top] ease-in duration-300"
+            ? " fixed w-[90%] left-0 right-0 mx-auto top-[15%] md:top-[20%] md:left-[50%] md:w-[550px] md:ml-[-275px] z-20 bg-white pt-6 pb-12 md:px-8 px-4 shadow-md rounded-md flex flex-col gap-4 transition-[top] ease-in duration-300"
             : "invisible absolute top-[40%] left-[50%] w-[400px] h-[400px] ml-[-200px] "
         }
       >
