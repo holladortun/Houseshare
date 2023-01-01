@@ -26,31 +26,32 @@ import Dashboard from "./pages/dashboardpages/Dashboard";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Slide } from "react-toastify";
+import { useSession } from "./swr/useSession";
+import Onboarding from "./pages/Onboarding";
 
 function App() {
   const [session, setSession] = useRecoilState(authSessionState);
 
   const setUserState = useSetRecoilState(userState);
-  const setPropertyData = useSetRecoilState(propertyDataState);
-  const [allUsers, setAllUsers] = useRecoilState(allUsersState);
+  /* const setPropertyData = useSetRecoilState(propertyDataState);
+  const [allUsers, setAllUsers] = useRecoilState(allUsersState); */
   /*  */
+  const { data, user } = useSession();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log(session);
       setSession(session);
     });
 
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
-
-    getProperties();
-  
+    setUserState(session?.user);
+    //getProperties();
   }, []);
 
-  setUserState(session?.user);
-
-  const getProperties = async () => {
+  /*   const getProperties = async () => {
     try {
       const { data, error } = await supabase
         .from("apartments")
@@ -61,16 +62,13 @@ function App() {
         });
       if (error) throw error;
       if (data != null) {
-        setPropertyData(data);
+       // setPropertyData(data);
       }
     } catch (error) {
       alert(error.message);
     }
   };
-
-  
-
-  console.log(allUsers);
+ */
   return (
     <>
       <ToastContainer transition={Slide} />

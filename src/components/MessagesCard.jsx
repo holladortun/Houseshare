@@ -3,7 +3,7 @@ import pic from "../../public/chatimg.jpg";
 import home from "../../public/firsthome.jpg";
 import TimeAgo from "timeago-react";
 import { readMessagePopUpState } from "../atoms/readMessagePopUpAtom";
-import { useSetRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import { messagesState } from "../atoms/messagesAtom";
 
 const MessagesCard = ({ message, handleReadMessage }) => {
@@ -12,7 +12,7 @@ const MessagesCard = ({ message, handleReadMessage }) => {
     created_at,
     id,
     sender_id: { profile_pictureurl, first_name, last_name },
-    apartments:{propertyimageurl}
+    apartments: { propertyimageurl },
   } = message;
 
   const messages = useRecoilValue(messagesState);
@@ -60,7 +60,11 @@ const MessagesCard = ({ message, handleReadMessage }) => {
         </div>
       </div>
       <div className="w-[22%] hidden md:block">
-        <img src={propertyimageurl} alt="" className="rounded-md h-[100px] object-cover" />
+        <img
+          src={propertyimageurl}
+          alt=""
+          className="rounded-md h-[100px] object-cover"
+        />
       </div>
     </div>
   );

@@ -13,6 +13,8 @@ import "react-multi-carousel/lib/styles.css";
 import profileDummy from "../assets/profile_dummy.png";
 import TimeAgo from "timeago-react";
 import { Link } from "react-router-dom";
+import { useProperties } from "../swr/useProperties";
+import useSWR from "swr";
 
 const PropertyCard = () => {
   const responsive = {
@@ -34,13 +36,16 @@ const PropertyCard = () => {
       items: 1,
     },
   };
+  //const propertyData = useRecoilValue(propertyDataState);
+  const { data: propertyData, error } = useProperties();
 
-  const propertyData = useRecoilValue(propertyDataState);
+  if (error) return console.error(error);
+  if (!propertyData) return <p>loading</p>;
 
   /*  if (propertyData) {
     propertyProfilePicture = propertyData.amount; /* ?.profile_pictureurl; */
 
-  console.log(propertyData);
+  // console.log(data);
 
   return (
     //<div className=" grid md:grid-cols-2 xl:grid-cols-3 gap-1 xl:gap-8">

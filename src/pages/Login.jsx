@@ -11,6 +11,7 @@ import { userState } from "../atoms/userAtom";
 import { authSessionState } from "../atoms/authSessionAtom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { ClipLoader } from "react-spinners";
+import { useUserProfile } from "../swr/useUserProfile";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -19,6 +20,15 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const handleNavigation = () => navigate("/account");
   const session = useRecoilValue(authSessionState);
+  /*   const userinfo = JSON.parse(
+    localStorage.getItem("sb-waafzskqomubrdnhnpzh-auth-token")
+  );
+
+  let user;
+  if (userinfo) {
+    user = userinfo.user;
+  }
+  const { data: userProfile } = useUserProfile(user); */
 
   useEffect(() => {
     if (session) {
@@ -32,26 +42,27 @@ const Login = () => {
 
     try {
       setLoading(true);
-      setTimeout(async () => {
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email: mail,
-          password: pass,
+
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: mail,
+        password: pass,
+      });
+
+      console.log(data?.session.access_token);
+      if (error) {
+        toast.success(error.message, {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 4000,
+          progressClassName: "custom-toast-progress",
         });
 
-        if (error) {
-          toast.success(error.message, {
-            position: toast.POSITION.TOP_CENTER,
-            autoClose: 4000,
-            progressClassName: "custom-toast-progress",
-          });
+        setLoading(false);
+      } else {
+        setMail("");
+        setPass("");
 
-          setLoading(false);
-        } else {
-          setMail("");
-          setPass("");
-          navigate("/account/dashboard");
-        }
-      }, 5000);
+        navigate("/account/dashboard");
+      }
     } catch (error) {
       alert(error.error_description || error);
     } finally {

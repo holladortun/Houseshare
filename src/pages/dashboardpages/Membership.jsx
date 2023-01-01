@@ -1,5 +1,6 @@
 import React from "react";
 import { usePaystackPayment } from "react-paystack";
+import useSWR from "swr";
 
 const config = {
   reference: new Date().getTime().toString(),
@@ -21,6 +22,9 @@ const onClose = () => {
 };
 
 const Membership = () => {
+  const { data: apartmentsdata, error } = useSWR(
+    "https://waafzskqomubrdnhnpzh.supabase.co/rest/v1/messages?select=*,sender_id(*),apartments(propertyimageurl)&receiver_id=eq.f8298a9e-2b89-48dd-831b-673aba0d8a49&read=eq.no&order=created_at.desc"
+  );
   const initializePayment = usePaystackPayment(config);
   return (
     <div className="flex  h-[80vh]  w-full z-10 pt-20">

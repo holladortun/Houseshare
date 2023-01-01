@@ -8,10 +8,11 @@ import { FaBath } from "react-icons/fa";
 import { FaBed } from "react-icons/fa";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { BsFillClockFill } from "react-icons/bs";
-import profileDummy from "../../assets/profile_dummy.png"
+import profileDummy from "../../assets/profile_dummy.png";
+import { useProperties } from "../../swr/useProperties";
 
 const Dashboard = () => {
-  const propertyData = useRecoilValue(propertyDataState);
+  const { data: propertyData } = useProperties();
 
   return (
     <div className="flex w-[100%]">
@@ -22,7 +23,7 @@ const Dashboard = () => {
         </div>
 
         <div className=" grid md:grid-cols-2 xl:grid-cols-3 gap-1 xl:gap-2">
-          {propertyData.map((property) => {
+          {propertyData?.map((property) => {
             return (
               <Link to={`/listings/${property.id}`}>
                 <div className="mx-2">
@@ -95,7 +96,6 @@ const Dashboard = () => {
             );
           })}
         </div>
-       
       </div>
     </div>
   );

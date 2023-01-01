@@ -19,51 +19,94 @@ import { messagesState } from "../../atoms/messagesAtom";
 import { bookmarksState } from "../../atoms/bookmarksAtom";
 import ReadMessagePopUp from "../../components/ReadMessagePopUp";
 import { ClipLoader } from "react-spinners";
+import { notificationsState } from "../../atoms/notificationsAtom";
+import useSWR from "swr";
+import { useUserProfile } from "../../swr/useUserProfile";
+import Onboarding from "../Onboarding";
 
 const Account = () => {
   const navigate = useNavigate();
   const handleLogoutNavigation = () => navigate("/login");
+  const [isOnboarding, setIsOnboarding] = useState(true);
 
   const menuOpen = useRecoilValue(mobileDrawerState);
-  const [userProfile, setUserProfile] = useRecoilState(userProfileState);
-  const [messages, setMessages] = useRecoilState(messagesState);
-  const user = useRecoilValue(userState);
+  /*  const [userProfile, setUserProfile] = useRecoilState(userProfileState); */
+  const setMessages = useSetRecoilState(messagesState);
+  const { user } = useRecoilValue(authSessionState);
+  /*   const { data: messagesData, error } = useSWR(
+    `https://waafzskqomubrdnhnpzh.supabase.co/rest/v1/messages?select=*,sender_id(*),apartments(propertyimageurl)&receiver_id=eq.${user.id}&read=eq.no&order=created_at.desc`
+  ); */
+
   const setuserListingsState = useSetRecoilState(userListingsState);
+  const setNotifications = useSetRecoilState(notificationsState);
   const [bookmarks, setbookmarks] = useRecoilState(bookmarksState);
   const [loggingOut, setLoggingOut] = useState(false);
+  /*  const { user } = JSON.parse(
+    localStorage.getItem("sb-waafzskqomubrdnhnpzh-auth-token")
+  ); */
+  const { data } = useUserProfile(user);
+  console.log(data);
 
   useEffect(() => {
-    getUserProfile();
-    getMessages();
-  }, []);
+    data?.onboarded == "yes" ? setIsOnboarding(false) : null;
+  }, [data]);
 
-  const getUserProfile = async () => {
+  /*   useEffect(() => {
+    userProfile?.onboarded == "yes"
+      ? navigate("/account/dashboard")
+      : navigate("/account/onboarding");
+    // getMessages();
+    // getNotifications();
+  }, []);
+ */
+  //if (userProfileNew) return console.log(userProfileNew)
+
+  /*   const getUserProfile = async () => {
     const { data, error } = await supabase
       .from("profiles")
       .select(`*,apartments(*)`)
       .eq("id", user.id)
-      .single(); /*  */
+      .single();
 
     setUserProfile(data);
 
     console.log(userProfile);
 
-    if (error) throw error;
+    //if (error) throw error;
+  }; */
+
+  /* const getMessages = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("messages")
+        .select(`*,sender_id(*),apartments(propertyimageurl)`)
+        .eq("receiver_id", user?.id)
+        .eq("read", "no")
+        .order("created_at", { ascending: false });
+
+      setMessages(data);
+      if (error) throw error;
+    } catch (error) {
+      alert(`${error.message} "messages"`);
+    }
   };
 
-  const getMessages = async () => {
-    const { data, error } = await supabase
-      .from("messages")
-      .select(`*,sender_id(*),apartments(propertyimageurl)`)
-      .eq("receiver_id", userProfile.id)
-      .eq("read", "no")
-      .order("created_at", { ascending: false });
+  const getNotifications = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("notifications")
+        .select(`*,trigger_id(profile_pictureurl,first_name)`)
+        .eq("recipient_id", user?.id)
+        .order("created_at", { ascending: false });
 
-    setMessages(data);
-  };
+      setNotifications(data);
+      if (error) throw error;
+    } catch (error) {
+      alert(`${error.message} "notifications"`);
+    }
+  }; */
 
-  console.log(messages);
-  const handleSignOut = async () => {
+  const handleSignOut = () => {
     try {
       setLoggingOut(true);
       setTimeout(async () => {
@@ -78,14 +121,18 @@ const Account = () => {
     } catch (error) {
       alert(error.message);
     } finally {
-      setUserProfile(null);
-      setMessages(null);
+      //setUserProfile(null);
+      // setMessages(null);
     }
   };
+  /*  if (error) return <div>failed to load</div>;
 
+  if (!messagesData) return <div>loading...</div>; */
   return (
-    <div>
+    <div className="relative">
+      {/*  {userProfile?.onboarded == "no" ? <Onboarding /> : null} */}
       <AccountNavbar />
+
       <div className=" bg-[#F5F8FF]  flex-col flex items-start pb-40 ">
         <div className="hidden w-[15%] xl:flex flex-col items-center bg-white px-[30px] h-[100vh] fixed">
           <div className="w-[100%]">
@@ -172,26 +219,35 @@ const Account = () => {
             </div>
           </div>
           <div className="flex flex-col self-start gap-1 mt-16 ">
-            <Link
-              className="flex items-center text-[16px] gap-4 text-white bg-brandblue  rounded-md py-3 px-4 "
-              onClick={handleSignOut}
-            >
-              <RiLogoutCircleLine className="text-[20px]" />
-              LogOut
-            </Link>
-            <Link
-              className="flex items-center text-[16px] gap-4 text-white bg-brandblue  rounded-md py-3 px-4 "
-              onClick={handleSignOut}
-            >
-              <ClipLoader size={20} color="#fff" speedMultiplier={0.8} />
-              LogOut
-            </Link>
+            {loggingOut ? (
+              <Link
+                className="flex items-center text-[16px] gap-4 text-white bg-brandblue  rounded-md py-3 px-4 "
+                onClick={handleSignOut}
+              >
+                <ClipLoader size={20} color="#fff" speedMultiplier={0.8} />
+                LogOut
+              </Link>
+            ) : (
+              <Link
+                className="flex items-center text-[16px] gap-4 text-white bg-brandblue  rounded-md py-3 px-4 "
+                onClick={handleSignOut}
+              >
+                <RiLogoutCircleLine className="text-[20px]" />
+                LogOut
+              </Link>
+            )}
           </div>
         </div>
 
         <div className="items-center justify-center w-full">
-          <Outlet />
-          <ReadMessagePopUp />
+          {isOnboarding ? (
+            <Onboarding />
+          ) : (
+            <>
+              <Outlet />
+              <ReadMessagePopUp />
+            </>
+          )}
         </div>
       </div>
     </div>

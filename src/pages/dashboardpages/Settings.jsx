@@ -6,13 +6,20 @@ import { BsUpload } from "react-icons/bs";
 import { useState, useRef } from "react";
 import { supabase } from "../../../supabaseClient";
 import { profileImageState } from "../../atoms/profileImageAtom";
+import useSWR, { useSWRConfig } from "swr";
+import { authSessionState } from "../../atoms/authSessionAtom";
+import axios from "axios";
+import { useUserProfile } from "../../swr/useUserProfile";
+import { data } from "autoprefixer";
+import useSWRMutation from "swr/mutation";
+
+const key = import.meta.env.VITE_APP_SUPABASE_ANON_KEY;
 
 const Settings = () => {
   //input ref
   const inputRef = useRef(null);
 
   const [image, setImage] = useRecoilState(profileImageState);
-  const [user, setUser] = useRecoilState(userState);
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -20,7 +27,32 @@ const Settings = () => {
   const [budget, setBudget] = useState("");
   const [preferredGender, setPreferredGender] = useState("");
 
-  const { email, id } = user;
+  const {
+    user: { email, id },
+  } = JSON.parse(localStorage.getItem("sb-waafzskqomubrdnhnpzh-auth-token"));
+  const { user } = JSON.parse(
+    localStorage.getItem("sb-waafzskqomubrdnhnpzh-auth-token")
+  );
+  const { mutate } = useUserProfile(user);
+
+  /*   const updateProfile = async (url, { arg }) => {
+    const res = await axios.patch(url, arg, {
+      headers: {
+        apikey: `${key}`,
+        Authorization: `Bearer ${key}`,
+      },
+    });
+    return res.data;
+  }; */
+  /*   const { trigger } = useSWRMutation(
+    `https://waafzskqomubrdnhnpzh.supabase.co/rest/v1/profiles?id=eq.${user.id}`,
+    updateProfile
+  ); */
+
+  /*   const { trigger, data } = useSWRMutation(
+    `https://waafzskqomubrdnhnpzh.supabase.co/rest/v1/profiles?id=eq.${id}`,
+    updateProfile
+  ); */
 
   let imagePreview;
   if (image) {
@@ -53,9 +85,18 @@ const Settings = () => {
 
   const handleProfile = async (e) => {
     e.preventDefault();
+    const updatedData = {
+      first_name: firstName,
+      last_name: lastName,
+      gender: gender,
+      budget: budget,
+      preferred_gender: preferredGender,
+      profile_pictureurl: `https://waafzskqomubrdnhnpzh.supabase.co/storage/v1/object/public/avatars/${image.name}`,
+    };
 
     try {
       uploadProfileImage();
+      /*  trigger(updatedData, { optimisticData: updatedData }); */
       const { error } = await supabase
         .from("profiles")
         .update({
@@ -67,12 +108,12 @@ const Settings = () => {
           profile_pictureurl: `https://waafzskqomubrdnhnpzh.supabase.co/storage/v1/object/public/avatars/${image.name}`,
         })
         .eq("id", id);
-
       if (error) {
         alert(error.message || error.description);
         console.log(error.message || error.description);
       } else {
-        alert("profile successfully updated");
+        console.log("profile successfully updated");
+        mutate();
       }
     } catch (error) {
       alert(error);

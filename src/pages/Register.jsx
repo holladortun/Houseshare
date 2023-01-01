@@ -10,12 +10,15 @@ import { Link } from "react-router-dom";
 
 const Register = () => {
   const [loading, setLoading] = useState(false);
-  const [session, setSession] = useState(null);
-  const [user, setUser] = useState(null);
-
+  /*   const [session, setSession] = useState(null);
+  const [user, setUser] = useState(null); */
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phone, setPhone] = useState("");
   const [mail, setMail] = useState("");
   const [pass, setPass] = useState("");
-  const [newUserError, setNewUserError] = useState(false);
+
+  // const [newUserError, setNewUserError] = useState(false);
   /* useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
@@ -27,7 +30,7 @@ const Register = () => {
     });
   }, []);  */
 
-  const handleSignIn = async (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
 
     try {
@@ -56,6 +59,21 @@ const Register = () => {
     }
   };
 
+  const uploadUserInfo = async (id) => {
+    try {
+      const { error } = await supabase
+        .from("profiles")
+        .update({
+          first_name: firstName,
+          last_name: lastName,
+        })
+        .eq("id", id);
+      if (error) throw error;
+    } catch (error) {
+      alert(error.error_description || error);
+    }
+  };
+
   /*  */
 
   /* toast.promise(Login, {
@@ -80,20 +98,55 @@ const Register = () => {
       <Navbar />
       <div>
         <div className="  min-h-[72vh] flex flex-col items-center justify-center gap-4 ">
-          <div className="">
+          <div className="container max-w-[500px] px-10">
             <h3 className="text-4xl text-center">Register</h3>
 
-            <form className="flex flex-col gap-4 mt-8 " onSubmit={handleSignIn}>
-              <div className="flex flex-col gap-2">
-                <input
-                  type="text"
-                  placeholder="Enter Your Email"
-                  className="border py-2 rounded-lg pl-4"
-                  required
-                  value={mail}
-                  onChange={(event) => setMail(event.target.value)}
-                />
+            <form className="flex flex-col gap-4 mt-8 " onSubmit={handleSignUp}>
+              {/* <div className="flex items-center gap-6">
+                <div className="flex flex-col gap-2 w-[50%]">
+                  <input
+                    type="text"
+                    placeholder="Enter Your First Name"
+                    className="border py-2 rounded-lg pl-4"
+                    required
+                    value={firstName}
+                    onChange={(event) => setFirstName(event.target.value)}
+                  />
+                </div>
+                <div className="flex flex-col gap-2 w-[50%]">
+                  <input
+                    type="text"
+                    placeholder="Enter Your Last Name"
+                    className="border py-2 rounded-lg pl-4"
+                    required
+                    value={lastName}
+                    onChange={(event) => setLastName(event.target.value)}
+                  />
+                </div>
+              </div> */}
+              <div className="flex flex-col items-center gap-4">
+                <div className="flex flex-col gap-2  w-[100%]">
+                  <input
+                    type="text"
+                    placeholder="Enter Your Email"
+                    className="border py-2 rounded-lg pl-4"
+                    required
+                    value={mail}
+                    onChange={(event) => setMail(event.target.value)}
+                  />
+                </div>
+                {/* <div className="flex flex-col gap-2  w-[100%]">
+                  <input
+                    type="number"
+                    placeholder="Enter Your Phone Number"
+                    className="border py-2 rounded-lg pl-4"
+                    required
+                    value={phone}
+                    onChange={(event) => setPhone(event.target.value)}
+                  />
+                </div> */}
               </div>
+
               <div className="flex flex-col gap-2  ">
                 <input
                   type="password"

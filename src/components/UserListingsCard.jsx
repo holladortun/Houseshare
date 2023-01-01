@@ -11,6 +11,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { userListingsState } from "../atoms/userListingsAtom";
 import { userProfileState } from "../atoms/userProfile";
+import { useUserProfile } from "../swr/useUserProfile";
 import TimeAgo from "timeago-react";
 
 const UserListingsCard = () => {
@@ -33,21 +34,25 @@ const UserListingsCard = () => {
       items: 1,
     },
   };
+  const { user } = JSON.parse(
+    localStorage.getItem("sb-waafzskqomubrdnhnpzh-auth-token")
+  );
+  const { data: userProfile } = useUserProfile(user);
 
-  const userProfile = useRecoilValue(userProfileState);
+  // const userProfile = useRecoilValue(userProfileState);
 
   let apartments;
 
   if (userProfile) {
-    apartments = userProfile.apartments;
+    apartments = userProfile?.apartments;
     console.log(apartments);
   }
 
   console.log(apartments);
   return (
-    //<div className=" grid md:grid-cols-2 xl:grid-cols-3 gap-1 xl:gap-8">
-    <Carousel responsive={responsive}>
-      {apartments.map((property) => {
+    <div className=" grid md:grid-cols-2 xl:grid-cols-3 gap-1 xl:gap-8">
+    {/* <Carousel responsive={responsive}> */}
+      {apartments?.map((property) => {
         return (
           <div className="mx-2">
             <div className="relative border-none">
@@ -112,8 +117,8 @@ const UserListingsCard = () => {
           </div>
         );
       })}
-    </Carousel>
-    // </div>
+    {/* </Carousel> */}
+    </div>
   );
 };
 

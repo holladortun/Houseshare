@@ -38,6 +38,7 @@ import { GrClose } from "react-icons/gr";
 import { ClipLoader } from "react-spinners";
 import { toast } from "react-toastify";
 import { authSessionState } from "../atoms/authSessionAtom";
+import { useProperties } from "../swr/useProperties";
 
 const SingleProperty = () => {
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -49,6 +50,7 @@ const SingleProperty = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const authSession = useRecoilValue(authSessionState);
+  const{data: propertyData}=  useProperties()
 
   let id;
 
@@ -78,7 +80,7 @@ const SingleProperty = () => {
   console.log(bookmarks);
   const properties = useRecoilValue(propertyDataState);
 
-  const singleProperty = properties.find((property) => {
+  const singleProperty = propertyData?.find((property) => {
     return property.id == listing_id;
   });
 
