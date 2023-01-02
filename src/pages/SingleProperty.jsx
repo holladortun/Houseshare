@@ -39,6 +39,7 @@ import { ClipLoader } from "react-spinners";
 import { toast } from "react-toastify";
 import { authSessionState } from "../atoms/authSessionAtom";
 import { useProperties } from "../swr/useProperties";
+import { useUserProfile } from "../swr/useUserProfile";
 
 const SingleProperty = () => {
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -46,18 +47,23 @@ const SingleProperty = () => {
   const [mailPopUp, setMailPopup] = useState(false);
   const [messageText, setMessageText] = useState("");
   const { listing_id } = useParams();
-  const userProfile = useRecoilValue(userProfileState);
+  //const userProfile = useRecoilValue(userProfileState);
 
   const [isLoading, setIsLoading] = useState(false);
   const authSession = useRecoilValue(authSessionState);
-  const{data: propertyData}=  useProperties()
+  const { data: propertyData } = useProperties();
+
+  const {
+    user: { id },
+  } = JSON.parse(localStorage.getItem("sb-waafzskqomubrdnhnpzh-auth-token"));
+  /*  const{data: userProfile} = useUserProfile(user)
 
   let id;
 
   if (userProfile) {
     id = userProfile.id;
   }
-
+ */
   /*   useEffect(() => {
     authSession ? getBookmarks() : null;
   }, []);

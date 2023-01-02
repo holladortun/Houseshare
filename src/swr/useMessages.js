@@ -16,7 +16,7 @@ export const useMessages = (user) => {
   const { data, error } = useSWR(
     `https://waafzskqomubrdnhnpzh.supabase.co/rest/v1/messages?select=*,sender_id(*),apartments(propertyimageurl)&receiver_id=eq.${user.id}&read=eq.no&order=created_at.desc`,
     fetcher,
-    /* { refreshInterval: 5000 } */
+    { refreshInterval: 5000 }
   );
   return { data, error };
 };

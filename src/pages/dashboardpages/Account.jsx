@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useLayoutEffect } from "react";
 import AccountNavbar from "../../components/AccountNavbar";
 
 import { supabase } from "../../../supabaseClient";
@@ -47,10 +47,9 @@ const Account = () => {
   const { data } = useUserProfile(user);
   console.log(data);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     data?.onboarded == "yes" ? setIsOnboarding(false) : null;
   }, [data]);
-
   /*   useEffect(() => {
     userProfile?.onboarded == "yes"
       ? navigate("/account/dashboard")
