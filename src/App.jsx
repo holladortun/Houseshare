@@ -86,6 +86,7 @@ function App() {
           exact
         >
           <Route path="/account/dashboard" element={<Dashboard />} />
+          <Route path="/account/onboarding" element={<Onboarding />} />
           <Route path="/account/properties" element={<Properties />} />
           <Route path="/account/mylistings" element={<MyListings />} />
           <Route path="/account/notifications" element={<Notifications />} />

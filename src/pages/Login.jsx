@@ -20,6 +20,8 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const handleNavigation = () => navigate("/account");
   const session = useRecoilValue(authSessionState);
+
+  //const { data } = useUserProfile(user);
   /*   const userinfo = JSON.parse(
     localStorage.getItem("sb-waafzskqomubrdnhnpzh-auth-token")
   );
@@ -30,13 +32,14 @@ const Login = () => {
   }
   const { data: userProfile } = useUserProfile(user); */
 
-  useEffect(() => {
+  /*   useEffect(() => {
     if (session) {
       navigate("/account/dashboard");
     }
-  }, []);
+  }, []); */
 
   // sign in function
+
   const handleSignIn = async (e) => {
     e.preventDefault();
 
@@ -58,10 +61,9 @@ const Login = () => {
 
         setLoading(false);
       } else {
+        await checkOnboardedStatus();
         setMail("");
         setPass("");
-
-        navigate("/account/dashboard");
       }
     } catch (error) {
       alert(error.error_description || error);
@@ -69,6 +71,31 @@ const Login = () => {
       {
       }
     }
+  };
+
+  const checkOnboardedStatus = async () => {
+    try {
+      const {
+        user: { id },
+      } = JSON.parse(
+        localStorage.getItem("sb-waafzskqomubrdnhnpzh-auth-token")
+      );
+      console.log(id);
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("onboarded")
+        .eq("id", id)
+        .single();
+
+      if (error) {
+        alert(error.error_description || error);
+      } else {
+        const { onboarded } = data;
+        onboarded == "yes"
+          ? navigate("/account/dashboard")
+          : navigate("/account/onboarding");
+      }
+    } catch (error) {}
   };
 
   return (

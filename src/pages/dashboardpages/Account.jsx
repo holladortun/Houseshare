@@ -44,12 +44,12 @@ const Account = () => {
   /*  const { user } = JSON.parse(
     localStorage.getItem("sb-waafzskqomubrdnhnpzh-auth-token")
   ); */
-  const { data } = useUserProfile(user);
+  /*  const { data } = useUserProfile(user);
   console.log(data);
-
-  useLayoutEffect(() => {
+ */
+  /*   useLayoutEffect(() => {
     data?.onboarded == "yes" ? setIsOnboarding(false) : null;
-  }, [data]);
+  }, [data]); */
   /*   useEffect(() => {
     userProfile?.onboarded == "yes"
       ? navigate("/account/dashboard")
@@ -239,14 +239,18 @@ const Account = () => {
         </div>
 
         <div className="items-center justify-center w-full">
-          {isOnboarding ? (
+          {/*  {isOnboarding ? (
             <Onboarding />
           ) : (
             <>
               <Outlet />
               <ReadMessagePopUp />
             </>
-          )}
+          )} */}
+          <>
+            <Outlet />
+            <ReadMessagePopUp />
+          </>
         </div>
       </div>
     </div>
