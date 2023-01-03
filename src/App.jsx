@@ -11,7 +11,7 @@ import MyListings from "./pages/dashboardpages/MyListings";
 import Notifications from "./pages/dashboardpages/Notifications";
 import Chat from "./pages/dashboardpages/Chat";
 import { supabase } from "../supabaseClient";
-import PrivateRoutes from "./utils/PrivateRoutes";
+//import PrivateRoutes from "./utils/PrivateRoutes";
 import Membership from "./pages/dashboardpages/Membership";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { authSessionState } from "./atoms/authSessionAtom";
@@ -28,6 +28,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Slide } from "react-toastify";
 import { useSession } from "./swr/useSession";
 import Onboarding from "./pages/Onboarding";
+import Profile from "./pages/dashboardpages/Profile";
 
 function App() {
   const [session, setSession] = useRecoilState(authSessionState);
@@ -92,7 +93,9 @@ function App() {
           <Route path="/account/notifications" element={<Notifications />} />
           <Route path="/account/memberships" element={<Membership />} />
           <Route path="/account/chat" element={<Chat />} />
-          <Route path="/account/settings" element={<Settings />} />
+          <Route path="/account/settings" element={<Settings />} exact>
+            <Route path="/account/settings/profile" element={<Profile />} />
+          </Route>
         </Route>
 
         <Route path="register" element={<Register />} />

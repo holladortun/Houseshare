@@ -27,15 +27,11 @@ import Onboarding from "../Onboarding";
 const Account = () => {
   const navigate = useNavigate();
   const handleLogoutNavigation = () => navigate("/login");
-  const [isOnboarding, setIsOnboarding] = useState(true);
 
   const menuOpen = useRecoilValue(mobileDrawerState);
-  /*  const [userProfile, setUserProfile] = useRecoilState(userProfileState); */
+
   const setMessages = useSetRecoilState(messagesState);
   const { user } = useRecoilValue(authSessionState);
-  /*   const { data: messagesData, error } = useSWR(
-    `https://waafzskqomubrdnhnpzh.supabase.co/rest/v1/messages?select=*,sender_id(*),apartments(propertyimageurl)&receiver_id=eq.${user.id}&read=eq.no&order=created_at.desc`
-  ); */
 
   const setuserListingsState = useSetRecoilState(userListingsState);
   const setNotifications = useSetRecoilState(notificationsState);
@@ -47,32 +43,6 @@ const Account = () => {
   /*  const { data } = useUserProfile(user);
   console.log(data);
  */
-  /*   useLayoutEffect(() => {
-    data?.onboarded == "yes" ? setIsOnboarding(false) : null;
-  }, [data]); */
-  /*   useEffect(() => {
-    userProfile?.onboarded == "yes"
-      ? navigate("/account/dashboard")
-      : navigate("/account/onboarding");
-    // getMessages();
-    // getNotifications();
-  }, []);
- */
-  //if (userProfileNew) return console.log(userProfileNew)
-
-  /*   const getUserProfile = async () => {
-    const { data, error } = await supabase
-      .from("profiles")
-      .select(`*,apartments(*)`)
-      .eq("id", user.id)
-      .single();
-
-    setUserProfile(data);
-
-    console.log(userProfile);
-
-    //if (error) throw error;
-  }; */
 
   /* const getMessages = async () => {
     try {
@@ -113,15 +83,11 @@ const Account = () => {
         if (error) {
           alert(error.message);
         } else {
-          // alert("You have been logged out");
           handleLogoutNavigation();
         }
       }, 2000);
     } catch (error) {
       alert(error.message);
-    } finally {
-      //setUserProfile(null);
-      // setMessages(null);
     }
   };
   /*  if (error) return <div>failed to load</div>;
@@ -239,14 +205,6 @@ const Account = () => {
         </div>
 
         <div className="items-center justify-center w-full">
-          {/*  {isOnboarding ? (
-            <Onboarding />
-          ) : (
-            <>
-              <Outlet />
-              <ReadMessagePopUp />
-            </>
-          )} */}
           <>
             <Outlet />
             <ReadMessagePopUp />

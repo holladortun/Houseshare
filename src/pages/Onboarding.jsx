@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { AiOutlineHome } from "react-icons/ai";
 import { supabase } from "../../supabaseClient";
-import { useState, useRef, useEffect,useLayoutEffect } from "react";
+import { useState, useRef, useEffect, useLayoutEffect } from "react";
 import profilepic from "../assets/profile_dummy.png";
 import { BsUpload } from "react-icons/bs";
 //import { IoReturnDownBackOutline } from "react-icons/io";
@@ -22,6 +22,11 @@ const Onboarding = () => {
   const [preloader, setPreloader] = useState(true);
   const [step, setStep] = useState(1);
   const [image, setImage] = useState("");
+  const [renterAccountTypeClicked, setRenterAccountTypeClicked] =
+    useState(false);
+  const [searcherAccountTypeClicked, setSearcherAccountTypeClicked] =
+    useState(false);
+  const [accountTypeNotSelected, setAccountTypeNotSelected] = useState(true);
   const inputRef = useRef(null);
 
   const navigate = useNavigate();
@@ -30,8 +35,8 @@ const Onboarding = () => {
   );
   const { mutate } = useUserProfile(user);
 
-useLayoutEffect(() => {
-    setPreloader(false)
+  useLayoutEffect(() => {
+    setPreloader(false);
   }, []);
 
   const options = {
@@ -81,6 +86,10 @@ useLayoutEffect(() => {
 
   const updateAccountTypetoRenter = async () => {
     try {
+      setRenterAccountTypeClicked(true);
+      setSearcherAccountTypeClicked((prevState) =>
+        prevState == true ? false : null
+      );
       const { error } = await supabase
         .from("profiles")
         .update({
@@ -96,6 +105,10 @@ useLayoutEffect(() => {
 
   const updateAccountTypetoSearcher = async () => {
     try {
+      setSearcherAccountTypeClicked(true);
+      setRenterAccountTypeClicked((prevState) =>
+        prevState == true ? false : null
+      );
       const { error } = await supabase
         .from("profiles")
         .update({
@@ -243,7 +256,13 @@ useLayoutEffect(() => {
                     className="sm:w-[50%] w-[100%]"
                     onClick={updateAccountTypetoRenter}
                   >
-                    <div className="hover:border-brandblue hover:scale-105 flex flex-col items-start gap-2 border border-black/10 p-6 rounded-lg transition-all ease-in duration-200 ">
+                    <div
+                      className={
+                        renterAccountTypeClicked
+                          ? "border-brandblue scale-105 flex flex-col items-start gap-2 border p-6 rounded-lg transition-all ease-in duration-200 "
+                          : "hover:border-brandblue hover:scale-105 flex flex-col items-start gap-2 border border-black/10 p-6 rounded-lg transition-all ease-in duration-200 "
+                      }
+                    >
                       <h4 className="text-brandblue text-[18px] font-bold ">
                         Renter
                       </h4>
@@ -257,7 +276,13 @@ useLayoutEffect(() => {
                     className="sm:w-[50%] w-[100%]"
                     onClick={updateAccountTypetoSearcher}
                   >
-                    <div className="hover:border-brandblue hover:scale-105 flex flex-col items-start gap-2 border border-black/10 p-6 rounded-lg transition-all ease-in duration-200 ">
+                    <div
+                      className={
+                        searcherAccountTypeClicked
+                          ? "border-brandblue scale-105 flex flex-col items-start gap-2 border p-6 rounded-lg transition-all ease-in duration-200 "
+                          : "hover:border-brandblue hover:scale-105 flex flex-col items-start gap-2 border border-black/10 p-6 rounded-lg transition-all ease-in duration-200 "
+                      }
+                    >
                       <h4 className="text-brandblue text-[18px] font-bold ">
                         Searcher
                       </h4>
@@ -270,7 +295,7 @@ useLayoutEffect(() => {
                 </div>
                 <div className="mt-8 w-full flex flex-col items-center gap-2">
                   <button
-                    className="btnlg w-[100%] font-bold text-[16px]"
+                    className={"btnlg w-[100%] font-bold text-[16px]"}
                     onClick={() => {
                       setStep(3);
                     }}

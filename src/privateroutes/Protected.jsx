@@ -3,14 +3,18 @@ import { authSessionState } from "../atoms/authSessionAtom";
 import { useRecoilValue } from "recoil";
 import { Navigate } from "react-router-dom";
 import { useState } from "react";
+import { useUserProfile } from "../swr/useUserProfile";
 
 const PrivateRoute = ({ children }) => {
-  // const auth = useRecoilValue(authSessionState);
+/*   const { user } = JSON.parse(
+    localStorage.getItem("sb-waafzskqomubrdnhnpzh-auth-token")
+  );
+  const { data } = useUserProfile(user);
+  console.log(data); */
 
   const jwt = useRecoilValue(authSessionState);
 
-console.log(jwt);
-  return jwt ? children : <Navigate to="/login" />;
+  return jwt  ? children : <Navigate to="/login" />;
 };
 
 export default PrivateRoute;

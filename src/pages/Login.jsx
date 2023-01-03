@@ -32,11 +32,11 @@ const Login = () => {
   }
   const { data: userProfile } = useUserProfile(user); */
 
-  /*   useEffect(() => {
+  useEffect(() => {
     if (session) {
       navigate("/account/dashboard");
     }
-  }, []); */
+  }, []);
 
   // sign in function
 
@@ -66,7 +66,12 @@ const Login = () => {
         setPass("");
       }
     } catch (error) {
-      alert(error.error_description || error);
+      toast.success("Invalid Login details", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 4000,
+        progressClassName: "custom-toast-progress",
+      });
+      setLoading(false);
     } finally {
       {
       }
@@ -88,7 +93,11 @@ const Login = () => {
         .single();
 
       if (error) {
-        alert(error.error_description || error);
+        toast.success(error.message, {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 4000,
+          progressClassName: "custom-toast-progress",
+        });
       } else {
         const { onboarded } = data;
         onboarded == "yes"

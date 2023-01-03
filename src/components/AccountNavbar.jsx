@@ -1,6 +1,6 @@
 import React from "react";
 import { AiOutlineHome } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ProfileDummy from "../assets/profile_dummy.png";
 import { supabase } from "../../supabaseClient";
 
@@ -9,8 +9,11 @@ import { GrClose } from "react-icons/gr";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { mobileDrawerState } from "../atoms/mobileDrawerAtom";
 import { userProfileState } from "../atoms/userProfile";
-import { BsFillBellFill } from "react-icons/bs";
+import { BsFillBellFill, BsFillCaretDownFill } from "react-icons/bs";
 import { IoMdMail } from "react-icons/io";
+import { RiEqualizerFill, RiAccountCircleFill } from "react-icons/ri";
+import { ImCogs } from "react-icons/im";
+import { BiLogOutCircle } from "react-icons/bi";
 import { messagesState } from "../atoms/messagesAtom";
 import MessagesCard from "./MessagesCard";
 import { useState, useEffect } from "react";
@@ -27,17 +30,20 @@ import { useNotifications } from "../swr/useNotifications";
 import SingleProperty from "../pages/SingleProperty";
 
 const AccountNavbar = () => {
+  const navigate = useNavigate();
+  const handleLogoutNavigation = () => navigate("/login");
   const [menuOpen, setMenuOpen] = useRecoilState(mobileDrawerState);
   const [isMessagesClicked, setIsMessagesClicked] = useState(false);
   const [isNotificationsClicked, setIsNotificationsClicked] = useState(false);
   const setClickedMessage = useSetRecoilState(clickedMessageState);
+  const [settingsPopupClicked, setSettingsPopupClicked] = useState(false);
   const notifications = useRecoilValue(notificationsState);
-  // const userProfile = useRecoilValue(userProfileState);
+
   const { user } = useRecoilValue(authSessionState);
   const { data: messagesData } = useMessages(user);
   const { data: notificationsData } = useNotifications(user);
   const { data: userProfileNew } = useUserProfile(user);
-  // const [messages, setMessages] = useRecoilState(messagesState);
+  const [loggingOut, setLoggingOut] = useState(false);
 
   const setReadMessagePopUp = useSetRecoilState(readMessagePopUpState);
 
@@ -93,6 +99,22 @@ const AccountNavbar = () => {
 
   const handleReadNotification = () => {};
 
+  const handleSignOut = () => {
+    try {
+      setLoggingOut(true);
+      setTimeout(async () => {
+        const { error } = await supabase.auth.signOut();
+        if (error) {
+          alert(error.message);
+        } else {
+          handleLogoutNavigation();
+        }
+      }, 2000);
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
   return (
     <div className="sticky top-0 bg-white z-10 ">
       <div className="overflow-hidden md:overflow-visible px-[20px] md:px-[40px]  2xl:px-[20px] py-6 flex justify-between items-center shadow-md ">
@@ -105,16 +127,18 @@ const AccountNavbar = () => {
 
         <div className="flex items-center gap-8 w-[100%] md:justify-end justify-between">
           <div className="  md:hidden flex items-center  justify-between gap-4">
-            <img
-              src={
-                userProfileNew?.profile_pictureurl
-                  ? userProfileNew?.profile_pictureurl
-                  : ProfileDummy
-              }
-              alt=""
-              className=" rounded-full w-[40px] h-[40px] object-cover border-brandblue border"
-            />
-            <h5 className="hidden">Hello {userProfileNew?.first_name}</h5>
+            <div className="flex items-center gap-1">
+              <img
+                src={
+                  userProfileNew?.profile_pictureurl
+                    ? userProfileNew?.profile_pictureurl
+                    : ProfileDummy
+                }
+                alt=""
+                className=" rounded-full w-[40px] h-[40px] object-cover border-brandblue border"
+              />
+              <BsFillCaretDownFill className="text-[#6A6E74]" />
+            </div>
           </div>
           <div>
             <div className="md:flex items-center gap-5 text-2xl text-[#7F7F7F] hidden">
@@ -226,17 +250,58 @@ const AccountNavbar = () => {
               </div>
             </div>
           </div>
-          <div className=" hidden md:flex  items-center  justify-between gap-4">
-            <img
-              src={
-                userProfileNew?.profile_pictureurl
-                  ? userProfileNew?.profile_pictureurl
-                  : ProfileDummy
-              }
-              alt=""
-              className=" rounded-full w-[40px] h-[40px] object-cover border-brandblue border"
-            />
-            <h5 className="text-black block">
+          <div className=" hidden md:flex  items-center  justify-between gap-4 relative">
+            <button
+              onClick={() => {
+                setSettingsPopupClicked(!settingsPopupClicked);
+              }}
+            >
+              <div className="flex items-center gap-1 cursor-pointer">
+                <img
+                  src={
+                    userProfileNew?.profile_pictureurl
+                      ? userProfileNew?.profile_pictureurl
+                      : ProfileDummy
+                  }
+                  alt=""
+                  className=" rounded-full w-[40px] h-[40px] object-cover border-brandblue border"
+                />
+                <BsFillCaretDownFill className="text-[#6A6E74]" />
+              </div>
+            </button>
+
+            {settingsPopupClicked ? (
+              <div className="absolute w-[150px]  bg-white  shadow-xl rounded-lg top-[150%] text-[#575757] flex flex-col  divide-y-2">
+                <div className="flex flex-col gap-2 px-4 pb-6 pt-2">
+                  <Link
+                    to="/account/settings/profile"
+                    onClick={() => {
+                      setSettingsPopupClicked(false);
+                    }}
+                  >
+                    <div className="flex items-center gap-2">
+                      <RiAccountCircleFill className="text-[22px]" />
+                      <p className="text-[16px]">Account</p>
+                    </div>
+                  </Link>
+
+                  <div className="flex items-center gap-2">
+                    <RiEqualizerFill className="text-[22px]" />
+                    <p className="text-[15px]">Preferences</p>
+                  </div>
+                </div>
+                <div className="px-4 py-2  ">
+                  <button onClick={handleSignOut}>
+                    <div className="flex gap-2 items-center">
+                      <BiLogOutCircle className="text-[22px]" />
+                      <p className="text-[16px]">Log Out</p>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            ) : null}
+
+            <h5 className="text-black block text-[18px] font-[500]">
               Hello {userProfileNew?.first_name}
             </h5>
           </div>
