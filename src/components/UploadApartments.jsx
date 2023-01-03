@@ -5,11 +5,12 @@ import { Link } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { propertyImageState } from "../atoms/propertyImage";
 import { userState } from "../atoms/userAtom";
+import { authSessionState } from "../atoms/authSessionAtom";
 
 const UploadApartments = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [description, setDescription] = useState("");
-  const [toilets, setToilets] = useState(null);
+  const [bedrooms, setBedrooms] = useState(null);
   const [bathrooms, setBathrooms] = useState(null);
   const [amount, setAmount] = useState("");
   const [gender, setGender] = useState("");
@@ -18,9 +19,9 @@ const UploadApartments = () => {
   const [ispropertyAdded, setIsPropertyAdded] = useState(false);
   const [uploadedImage, setUploadedImage] = useState("");
 
-  const user = useRecoilValue(userState);
+  const { user } = useRecoilValue(authSessionState);
 
-/*   const { id } = user;
+  /*   const { id } = user;
   console.log(id); */
 
   const handleSubmit = async (event) => {
@@ -32,8 +33,8 @@ const UploadApartments = () => {
       const { error } = await supabase.from("apartments").insert({
         description: description,
         amount: amount,
-        bathroom: bathrooms,
-        toilet: toilets,
+        bathrooms: bathrooms,
+        bedrooms: bedrooms,
         gender: gender,
         location: location,
         propertyimageurl: `https://waafzskqomubrdnhnpzh.supabase.co/storage/v1/object/public/apartments/${propertyImage.name}`,
@@ -55,7 +56,7 @@ const UploadApartments = () => {
     }
 
     setDescription("");
-    setToilets("");
+    setBedrooms("");
     setBathrooms("");
     setAmount("");
     setGender("");
@@ -125,15 +126,15 @@ const UploadApartments = () => {
                 </div>
 
                 <div className="flex flex-col gap-2 xl:w-[50%]">
-                  <label for="name">No. of Toilets</label>
+                  <label for="name">No. of Bedrooms</label>
                   <input
                     type="number"
                     id="name"
                     placeholder="Enter description for your property"
                     className="border py-2 rounded-lg pl-4"
                     required
-                    value={toilets}
-                    onChange={(e) => setToilets(e.target.value)}
+                    value={bedrooms}
+                    onChange={(e) => setBedrooms(e.target.value)}
                   />
                 </div>
               </div>

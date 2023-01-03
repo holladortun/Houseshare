@@ -53,9 +53,6 @@ const SingleProperty = () => {
   const authSession = useRecoilValue(authSessionState);
   const { data: propertyData } = useProperties();
 
-  const {
-    user: { id },
-  } = JSON.parse(localStorage.getItem("sb-waafzskqomubrdnhnpzh-auth-token"));
   /*  const{data: userProfile} = useUserProfile(user)
 
   let id;
@@ -133,7 +130,7 @@ const SingleProperty = () => {
     try {
       setIsLoading(true);
       const { error } = await supabase.from("messages").insert({
-        sender_id: id,
+        sender_id: authSession?.user.id,
         receiver_id: singleProperty?.profiles.id,
         message_text: messageText,
         property_id: listing_id,
@@ -152,19 +149,6 @@ const SingleProperty = () => {
       });
     }
   };
-
-  supabase
-    .channel("public:profiles")
-    .on(
-      "postgres_changes",
-      { event: "UPDATE", schema: "public", table: "profiles" },
-      (payload) => {
-        console.log("Change received!", payload);
-      }
-    )
-    .subscribe();
-
-  console.log(singleProperty?.profiles);
 
   const handleOpenMessagePopUp = () => {
     authSession
@@ -282,7 +266,8 @@ const SingleProperty = () => {
                 </span>
                 <p className="text-[17px]">by</p>
                 <p className="text-[17px]">
-                  {singleProperty?.author_id == id
+                  {authSession &&
+                  singleProperty?.author_id == authSession?.user.id
                     ? "You"
                     : singleProperty?.profiles.first_name}
                 </p>
@@ -314,7 +299,8 @@ const SingleProperty = () => {
               <p className="font-medium text-[17px]">per night</p>
             </span>
           </div>
-          {singleProperty?.author_id == id ? null : (
+          {authSession &&
+          singleProperty?.author_id == authSession?.user.id ? null : (
             <div className="flex items-start gap-3">
               <a className="btnlg flex items-center gap-2 text-[15px]" href="#">
                 Call Now{" "}

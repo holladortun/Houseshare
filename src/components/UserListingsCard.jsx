@@ -50,7 +50,7 @@ const UserListingsCard = () => {
 
   console.log(apartments);
   return (
-    <div className=" grid md:grid-cols-2 xl:grid-cols-3 gap-1 xl:gap-8">
+    <div className=" grid md:grid-cols-2 xl:grid-cols-3 gap-1 xl:gap-2">
     {/* <Carousel responsive={responsive}> */}
       {apartments?.map((property) => {
         return (
