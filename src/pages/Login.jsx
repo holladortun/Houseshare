@@ -117,7 +117,7 @@ const Login = () => {
           <form className="flex flex-col gap-4 mt-8 " onSubmit={handleSignIn}>
             <div className="flex flex-col gap-2">
               <input
-                type="text"
+                type="email"
                 placeholder="Enter Your Email"
                 className="border py-2 rounded-lg pl-4"
                 required

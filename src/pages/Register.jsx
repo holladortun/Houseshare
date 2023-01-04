@@ -125,9 +125,6 @@ const Register = () => {
     } catch (error) {}
   };
 
-
-  
-
   const uploadUserInfo = async (id) => {
     try {
       const { error } = await supabase
@@ -196,7 +193,7 @@ const Register = () => {
               <div className="flex flex-col items-center gap-4">
                 <div className="flex flex-col gap-2  w-[100%]">
                   <input
-                    type="text"
+                    type="email"
                     placeholder="Enter Your Email"
                     className="border py-2 rounded-lg pl-4"
                     required
