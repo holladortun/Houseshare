@@ -58,6 +58,75 @@ const Register = () => {
       }
     }
   };
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+
+    try {
+      setLoading(true);
+
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: mail,
+        password: pass,
+      });
+
+      console.log(data?.session.access_token);
+      if (error) {
+        toast.success(error.message, {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 4000,
+          progressClassName: "custom-toast-progress",
+        });
+
+        setLoading(false);
+      } else {
+        await checkOnboardedStatus();
+        setMail("");
+        setPass("");
+      }
+    } catch (error) {
+      toast.success("Invalid Login details", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 4000,
+        progressClassName: "custom-toast-progress",
+      });
+      setLoading(false);
+    } finally {
+      {
+      }
+    }
+  };
+
+  const checkOnboardedStatus = async () => {
+    try {
+      const {
+        user: { id },
+      } = JSON.parse(
+        localStorage.getItem("sb-waafzskqomubrdnhnpzh-auth-token")
+      );
+      console.log(id);
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("onboarded")
+        .eq("id", id)
+        .single();
+
+      if (error) {
+        toast.success(error.message, {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 4000,
+          progressClassName: "custom-toast-progress",
+        });
+      } else {
+        const { onboarded } = data;
+        onboarded == "yes"
+          ? navigate("/account/dashboard")
+          : navigate("/account/onboarding");
+      }
+    } catch (error) {}
+  };
+
+
+  
 
   const uploadUserInfo = async (id) => {
     try {

@@ -83,7 +83,7 @@ const UploadApartments = ({ closeUploadProperty }) => {
   }; */
 
   return (
-    <div className=" relative py-4">
+    <div className=" relative py-4 shadow-xl">
       <h4 className=" font-bold  pb-8 text-2xl"></h4>
 
       {isLoading ? (
