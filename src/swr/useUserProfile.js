@@ -13,10 +13,9 @@ const fetcher = async (url) => {
   return res.data;
 };
 
-
 export const useUserProfile = (user) => {
   const { data, error, mutate } = useSWR(
-    `https://waafzskqomubrdnhnpzh.supabase.co/rest/v1/profiles?select=*,apartments(*)&id=eq.${user.id}`,
+    `https://waafzskqomubrdnhnpzh.supabase.co/rest/v1/profiles?select=*,apartments(*)&order=id.desc&id=eq.${user.id}`,
     fetcher
   );
   return { data, error, mutate };

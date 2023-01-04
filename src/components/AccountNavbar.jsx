@@ -116,7 +116,7 @@ const AccountNavbar = () => {
   };
 
   return (
-    <div className="sticky top-0 bg-white z-10 ">
+    <div className="sticky top-0 bg-white z-40 ">
       <div className="overflow-hidden md:overflow-visible px-[20px] md:px-[40px]  2xl:px-[20px] py-6 flex justify-between items-center shadow-md ">
         <Link to="/" className="hidden md:block">
           <div className="flex items-center gap-2">

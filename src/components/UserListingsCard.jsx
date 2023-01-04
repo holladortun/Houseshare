@@ -39,19 +39,15 @@ const UserListingsCard = () => {
   );
   const { data: userProfile } = useUserProfile(user);
 
-  // const userProfile = useRecoilValue(userProfileState);
-
   let apartments;
 
   if (userProfile) {
     apartments = userProfile?.apartments;
-    console.log(apartments);
   }
 
-  console.log(apartments);
   return (
     <div className=" grid md:grid-cols-2 xl:grid-cols-3 gap-1 xl:gap-2">
-    {/* <Carousel responsive={responsive}> */}
+      {/* <Carousel responsive={responsive}> */}
       {apartments?.map((property) => {
         return (
           <div className="mx-2">
@@ -117,7 +113,7 @@ const UserListingsCard = () => {
           </div>
         );
       })}
-    {/* </Carousel> */}
+      {/* </Carousel> */}
     </div>
   );
 };

@@ -6,9 +6,12 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { propertyImageState } from "../atoms/propertyImage";
 import { userState } from "../atoms/userAtom";
 import { authSessionState } from "../atoms/authSessionAtom";
+import { GrClose } from "react-icons/gr";
+import { Textarea } from "flowbite-react";
 
-const UploadApartments = () => {
+const UploadApartments = ({ closeUploadProperty }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [bedrooms, setBedrooms] = useState(null);
   const [bathrooms, setBathrooms] = useState(null);
@@ -28,16 +31,19 @@ const UploadApartments = () => {
     event.preventDefault();
 
     try {
-      uploadImage();
       setIsLoading(true);
+      const imagePath = `${crypto.randomUUID()}_${propertyImage.name}`;
+      await uploadImage(imagePath);
+
       const { error } = await supabase.from("apartments").insert({
+        title: title,
         description: description,
         amount: amount,
         bathrooms: bathrooms,
         bedrooms: bedrooms,
         gender: gender,
         location: location,
-        propertyimageurl: `https://waafzskqomubrdnhnpzh.supabase.co/storage/v1/object/public/apartments/${propertyImage.name}`,
+        propertyimageurl: `https://waafzskqomubrdnhnpzh.supabase.co/storage/v1/object/public/apartments/${imagePath}`,
         author_id: user?.id,
       });
       if (error) throw error;
@@ -45,31 +51,23 @@ const UploadApartments = () => {
       alert(error.message);
     } finally {
       setIsLoading(false);
-      /*  const { error } = await supabase.from("apartments").insert({
-        propertyimageurl: uploadedImage,
-      }); */
-      /* const { data } = supabase.storage
-        .from("apartments")
-        .getPublicUrl(propertyImage.name);
-      setUploadedImage(data.publicUrl);
-      console.log(uploadedImage); */
+
+      setTitle("");
+      setDescription("");
+      setBedrooms("");
+      setBathrooms("");
+      setAmount("");
+      setGender("");
+      setLocation("");
+      setIsPropertyAdded(true);
     }
-
-    setDescription("");
-    setBedrooms("");
-    setBathrooms("");
-    setAmount("");
-    setGender("");
-    setLocation("");
-
-    setIsPropertyAdded(true);
   };
 
-  const uploadImage = async () => {
+  const uploadImage = async (imagePath) => {
     if (propertyImage) {
       const { data, error } = await supabase.storage
         .from("apartments")
-        .upload(propertyImage.name, propertyImage);
+        .upload(`${imagePath}`, propertyImage);
 
       if (error) throw error;
       console.log(data);
@@ -93,21 +91,25 @@ const UploadApartments = () => {
           <p>Your property is being listed...</p>
         </div>
       ) : (
-        <div className="container max-w-[900px] mx-auto bg-white ">
-          <div className="shadow-lg xl:p-10 p-5">
+        <div className="container max-w-[700px] mx-auto bg-white rounded-lg ">
+          <div className="shadow-lg xl:p-10 p-5 flex flex-col gap-2">
+            <GrClose
+              className="self-end text-brandblue text-[25px] cursor-pointer hover:scale-110 hover:transition-all ease-in duration-300"
+              onClick={closeUploadProperty}
+            />
             <form
               onSubmit={() => handleSubmit(event)}
               className="flex flex-col gap-8"
             >
               <div className="flex flex-col gap-2">
-                <label for="description">Description of Property</label>
+                <label for="description">Title of Listing</label>
                 <input
                   type="text"
-                  id="description"
-                  placeholder="Enter description for your property"
+                  maxLength="50"
+                  placeholder="For ex. Two Bedroom Flat in Lekki"
                   className="border py-2 rounded-lg pl-4"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
                   required
                 />
               </div>
@@ -117,7 +119,7 @@ const UploadApartments = () => {
                   <input
                     type="number"
                     id="name"
-                    placeholder="Enter description for your property"
+                    placeholder="Enter number of Bathrooms"
                     className="border py-2 rounded-lg pl-4"
                     required
                     value={bathrooms}
@@ -130,7 +132,7 @@ const UploadApartments = () => {
                   <input
                     type="number"
                     id="name"
-                    placeholder="Enter description for your property"
+                    placeholder="Enter number of Bedrooms"
                     className="border py-2 rounded-lg pl-4"
                     required
                     value={bedrooms}
@@ -146,7 +148,7 @@ const UploadApartments = () => {
                     type="text"
                     id="name"
                     placeholder="Enter description for your property"
-                    className="border py-2 rounded-lg pl-4"
+                    className="border py-2.5 rounded-lg pl-4"
                     required
                     value={location}
                     onChange={(e) => {
@@ -162,6 +164,7 @@ const UploadApartments = () => {
                     onChange={(e) => {
                       setGender(e.target.value);
                     }}
+                    required
                   >
                     <option value="select">Select Gender</option>
                     <option value="male">Male</option>
@@ -173,8 +176,8 @@ const UploadApartments = () => {
                 <div className="flex flex-col gap-2 xl:w-[50%]">
                   <label for="name">Amount</label>
                   <input
-                    type="type"
-                    id="name"
+                    type="number"
+                    placeholder="Enter cost of your property"
                     required
                     className="border py-2 rounded-lg pl-4"
                     value={amount}
@@ -184,6 +187,7 @@ const UploadApartments = () => {
                 <div className="flex flex-col gap-2 xl:w-[50%]">
                   <label for="name">Upload Property Image</label>
                   <input
+                    required
                     type="file"
                     id="name"
                     placeholder="Ex.200,000"
@@ -194,7 +198,18 @@ const UploadApartments = () => {
                   />
                 </div>
               </div>
-
+              <div className="flex flex-col gap-2">
+                <label for="description">Description of Property</label>
+                <textarea
+                  rows="5"
+                  maxLength="800"
+                  placeholder="Enter description for your property"
+                  className="border py-2 rounded-lg pl-4"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  required
+                />
+              </div>
               <button type="submit" className="btnmd py-3">
                 Add Property
               </button>
@@ -202,7 +217,7 @@ const UploadApartments = () => {
           </div>
         </div>
       )}
-      {ispropertyAdded && (
+      {/* {ispropertyAdded && (
         <div className="w-screen h-screen bg-black/80 absolute top-0 flex justify-center items-center">
           <div className="bg-white w-[400px] h-[200px] py-5 rounded-lg flex flex-col justify-center ">
             <h4 className="text-brandblue text-center font-[600] text-2xl">
@@ -226,7 +241,7 @@ const UploadApartments = () => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };
