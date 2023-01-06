@@ -165,8 +165,18 @@ const EditListingForm = () => {
                   placeholder={editedListing?.gender}
                 >
                   <option value="select">select gender</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
+                  <option
+                    value="male"
+                    selected={editedListing?.gender == "male" ? "yes" : null}
+                  >
+                    Male
+                  </option>
+                  <option
+                    value="female"
+                    selected={editedListing?.gender == "female" ? "yes" : null}
+                  >
+                    Female
+                  </option>
                 </select>
               </div>
             </div>
@@ -199,14 +209,15 @@ const EditListingForm = () => {
             <div className="flex flex-col gap-2">
               <label for="description">Description of Property</label>
               <textarea
-                rows="5"
+                ////rows="5"
                 maxLength="800"
-                placeholder={editedListing?.description}
                 className="border py-2 rounded-lg pl-4"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                required
-              />
+                //value={description}
+              //  onChange={(e) => setDescription(e.target.value)}
+               required
+              >
+                {editedListing?.description}
+              </textarea>
             </div>
             <button type="submit" className="btnmd py-3">
               Save Update

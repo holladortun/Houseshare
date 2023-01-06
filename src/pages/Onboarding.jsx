@@ -22,6 +22,8 @@ const Onboarding = () => {
   const [preloader, setPreloader] = useState(true);
   const [step, setStep] = useState(1);
   const [image, setImage] = useState("");
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [isLaunching, setIsLaunching] = useState(false);
   const [renterAccountTypeClicked, setRenterAccountTypeClicked] =
     useState(false);
   const [searcherAccountTypeClicked, setSearcherAccountTypeClicked] =
@@ -124,6 +126,7 @@ const Onboarding = () => {
 
   const insertImageLink = async () => {
     try {
+      setUploadingImage(true);
       await uploadProfileImage();
       const { error } = await supabase
         .from("profiles")
@@ -132,7 +135,11 @@ const Onboarding = () => {
         })
         .eq("id", user.id);
       setStep(4);
-      if (error) throw error;
+      if (error) {
+        throw error;
+      } else {
+        setUploadingImage(false);
+      }
     } catch (error) {
       alert(error.message);
     }
@@ -156,6 +163,7 @@ const Onboarding = () => {
 
   const launchDashboard = async () => {
     try {
+      setIsLaunching(true);
       const { error } = await supabase
         .from("profiles")
         .update({
@@ -167,6 +175,7 @@ const Onboarding = () => {
         throw error;
       } else {
         mutate();
+        setIsLaunching(false);
         navigate("/account/dashboard");
       }
     } catch (error) {
@@ -342,10 +351,17 @@ const Onboarding = () => {
                 </div>
                 <div className="mt-8 w-full flex flex-col items-center gap-2">
                   <button
-                    className="btnlg w-[100%] font-bold text-[16px]"
+                    className="btnlg w-[100%] font-bold text-[16px] flex justify-center items-center gap-2"
                     onClick={insertImageLink}
                   >
-                    Next
+                    {uploadingImage ? (
+                      <ClipLoader
+                        size={20}
+                        color="#fff"
+                        speedMultiplier={0.8}
+                      />
+                    ) : null}
+                    {uploadingImage ? "Uploading Image..." : "Next"}
                   </button>
                   <button
                     className="text-[14px] flex items-center gap-2 text-gray-500 hover:scale-105 transition-all duration-150 ease-in"
@@ -391,12 +407,27 @@ const Onboarding = () => {
               </div> */}
                 </div>
                 <div className="mt-8 w-full flex flex-col items-center gap-2">
-                  <button
-                    className="btnlg w-[100%] font-bold text-[16px]"
-                    onClick={launchDashboard}
-                  >
-                    Launch Dashboard
-                  </button>
+                  {isLaunching ? (
+                    <button
+                      className="btnlg w-[100%] font-bold text-[16px] flex items-center justify-center gap-2"
+                      onClick={launchDashboard}
+                    >
+                      <ClipLoader
+                        size={20}
+                        color="#fff"
+                        speedMultiplier={0.8}
+                      />
+                      Painting Properties...
+                    </button>
+                  ) : (
+                    <button
+                      className="btnlg w-[100%] font-bold text-[16px] flex items-center justify-center gap-2"
+                      onClick={launchDashboard}
+                    >
+                      Launch Dashboard
+                    </button>
+                  )}
+
                   {/* <button
                 className="text-[14px] flex items-center gap-2 text-gray-500 hover:scale-105 transition-all duration-150 ease-in"
                 onClick={() => {
